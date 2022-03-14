@@ -1,3 +1,5 @@
+#imports always are on top
+import random
 health=100
 playerlevel=1
 enemylevel=0
@@ -84,7 +86,6 @@ def attack1():
         choice1()
 ##end code for graveyard battle
 ## code for randomized variable
-import random
 enemylevel = random.randint(1,5)
 enemydam= random.randint(5,10)
 playerdam = random.randint(50,100)
