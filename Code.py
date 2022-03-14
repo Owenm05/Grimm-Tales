@@ -1,4 +1,4 @@
-#imports always are on top
+#imports are always on top
 import random
 health=100
 playerlevel=1
