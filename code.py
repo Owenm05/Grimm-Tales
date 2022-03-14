@@ -45,7 +45,7 @@ def choice2():
             villageinn()
 
 
-##code for the village                    
+##code for the village
 def villageinn(healamount):
     global health
     print('you enter the inn\n')
