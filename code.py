@@ -91,9 +91,9 @@ def attack1():
             print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n') 
         if enemyhp<=0:
             win1=True
-            choice1()
+            scene1()
     elif c3b=='flee' and c2a=='north' or c2a=='n':
-        choice1()
+        scene1()
 ##end code for graveyard battle
 
 
@@ -115,7 +115,7 @@ def scene1():
             ending1()
     elif c2a=='south' or c2a=='back' or c2a=='turn back':
         print('You move back to the crossroads ')
-        choice1()
+        scene1()
 ##end code for inital choice
 
 
