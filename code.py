@@ -97,14 +97,6 @@ def attack1():
 ##end code for graveyard battle
 
 
-## code for randomized variable
-enemylevel = random.randint(1,5)
-enemydam= random.randint(5,10)
-playerdam = random.randint(50,100)
-enemynumber=random.randint(0,1)
-enemy=(enemy[random.randint(0,1)])
-
-
 ##code for the inital choice
 def choice1():
     global c2a
@@ -137,4 +129,12 @@ def win_graveyard():
 
 ##running all the functions to run the code
 if __name__ == '__main__':
-    choice1() 
+    ## code for randomized variable
+    enemylevel = random.randint(1,5)
+    enemydam = random.randint(5,10)
+    playerdam = random.randint(50,100)
+    enemynumber = random.randint(0,1)
+    enemy = (enemy[random.randint(0,1)])
+
+    choice1()
+
