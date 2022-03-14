@@ -1,13 +1,13 @@
 #imports are always on top
 import random
 
-health=100
-playerlevel=1
-enemylevel=0
-enemyhp=0
-c2a=''
-enemy=['bat','undead soldier']
-win1=False
+health = 100
+playerlevel = 1
+enemylevel = 0
+enemyhp = 0
+c2a = ''
+enemy = ['bat','undead soldier']
+win1 = False
 
 
 ##start code for game endings
