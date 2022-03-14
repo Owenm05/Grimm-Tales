@@ -6,6 +6,11 @@ c2a=""
 enemy=["bat","undead soldier"]
 win1=False
 ##start code for game endings
+def ending1():
+    print("As you enter the cave the ceiling collapses behind you")
+    print("You decide to leave the cave and emerge through a grove of trees into a forest")
+    print("You settle down and live out the rest of your days alone in the peaceful forest\n")
+    print("congrats you reached the first ending")
 def ending2():
     print ('A goblin horde surrounds you and defeats you')
     print("you die")
@@ -14,7 +19,6 @@ def ending3():
     health=100
     print("you died in your sleep")
     print("you reached the third ending")
-
 ##end code for ending
 ##gives the user the choices for the right path
 def choice2():
@@ -40,6 +44,8 @@ def villageinn(healamount):
     choiceinn=input("for 100 gold you can rest to full hp. Would you like to do so?\n")
     if choiceinn=="yes" or choiceinn=="y":
         ending3()
+    elif choiceinn=="no" or choiceinn=="n":
+        print('you have have gone too far there is no turning back')
 ##end code for village
 ##code for graveyard battle
 def attack2():
@@ -100,24 +106,16 @@ def choice1():
         if win1==False:
             attack1()
         elif win1==True:
-            darkcave()
+            ending1()
     elif c2a=="south" or c2a=="back" or c2a=="turn back":
         print("You move back to the crossroads ")
         choice1()
 ##end code for inital choice
-##start code for the inside of the cave
-def darkcave():
-    print("As you enter the cave the ceiling collapses behind you")
-    print("You decide to leave the cave and emerge through a grove of trees into a forest")
-    print("You settle down and live out the rest of your days alone in the peaceful forest\n")
-    print("congrats you reached the first ending")
-##end code for the inside of the cave
-##running all the functions to run the code
-choice1()
 def win_graveyard():
     if choicetwob=="ne" or choicetwob=="nourtheast":
         print("You are in a graveyard, to the southwest there is a path that leads to a crossroad \n ")
         c3b=input("choose either village, nw or ne")
     if choicetwob== "southwest" or c2b== "sw":
         print("You walk back to the crossroads")
-
+##running all the functions to run the code
+choice1()
