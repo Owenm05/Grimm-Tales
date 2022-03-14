@@ -20,8 +20,9 @@ def ending2():
 def ending3():
     print('you died in your sleep')
     print('you reached the third ending')
-
 ##end code for ending
+
+
 ##gives the user the choices for the right path
 def choice2():
     print('You go east\n north of you you see a village \n to the northwest you see a forest and to the northeast you see a graveyard\n')
@@ -39,6 +40,8 @@ def choice2():
         elif village=='no':
             print('you dont have a choice')
             villageinn()
+
+
 ##code for the village                    
 def villageinn(healamount):
     global health
@@ -49,6 +52,8 @@ def villageinn(healamount):
     elif choiceinn=='no' or choiceinn=='n':
         print('you have have gone too far there is no turning back')
 ##end code for village
+
+
 ##code for graveyard battle
 def attack2():
     global enemyhp
@@ -64,6 +69,8 @@ def attack2():
     elif c3b=='flee':
         choice2()
 ##end code for graveyard battle
+
+
 ##start code for cave battle
 def attack1():
     global c2a
@@ -85,12 +92,16 @@ def attack1():
     elif c3b=='flee' and c2a=='north' or c2a=='n':
         choice1()
 ##end code for graveyard battle
+
+
 ## code for randomized variable
 enemylevel = random.randint(1,5)
 enemydam= random.randint(5,10)
 playerdam = random.randint(50,100)
 enemynumber=random.randint(0,1)
 enemy=(enemy[random.randint(0,1)])
+
+
 ##code for the inital choice
 def choice1():
     global c2a
@@ -111,12 +122,16 @@ def choice1():
         print('You move back to the crossroads ')
         choice1()
 ##end code for inital choice
+
+
 def win_graveyard():
     if choicetwob=='ne' or choicetwob=='nourtheast':
         print('You are in a graveyard, to the southwest there is a path that leads to a crossroad \n ')
         c3b=input('choose either village, nw or ne')
     if choicetwob== 'southwest' or c2b== 'sw':
         print('You walk back to the crossroads')
+
+
 ##running all the functions to run the code
 choice1()
 
