@@ -51,7 +51,6 @@ def villageinn(healamount):
 ##code for graveyard battle
 def attack2():
     global enemyhp
-    global c2a
     enemyhp=enemylevel*50
     print('A level',enemylevel,enemy,' appears it has', enemyhp,'hp')
     c3b=input('fight or flee?\n')
