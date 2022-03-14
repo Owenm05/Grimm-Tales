@@ -136,5 +136,5 @@ def win_graveyard():
 
 
 ##running all the functions to run the code
-choice1()
-
+if __name__ == '__main__':
+    choice1() 
