@@ -98,7 +98,7 @@ def attack1():
 
 
 ##code for the inital choice
-def choice1():
+def scene1():
     global c2a
     c1=input('You are at a crossroad,Do you want to move west or move east?\n')
     if c1=='east' or c1=='e':
@@ -136,5 +136,5 @@ if __name__ == '__main__':
     enemynumber = random.randint(0,1)
     enemy = (enemy[random.randint(0,1)])
 
-    choice1()
+    scene1()
 
