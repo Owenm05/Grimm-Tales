@@ -16,7 +16,6 @@ def ending2():
     print('you die')
     print('you unlocked the second ending')
 def ending3():
-    health=100
     print('you died in your sleep')
     print('you reached the third ending')
 
