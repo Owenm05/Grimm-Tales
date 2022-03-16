@@ -1,3 +1,5 @@
+
+   
 #imports are always on top
 import random
 
@@ -59,14 +61,21 @@ def villageinn(healamount):
 
 ##code for graveyard battle
 def attack2():
+    global health
     global enemyhp
     enemyhp=enemylevel*50
     print('A level',enemylevel,enemy,' appears it has', enemyhp,'hp')
     c3b=input('fight or flee?\n')
     if c3b=='fight':
-        while enemyhp>0:
-            enemyhp=enemyhp-playerdam
-            print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n')
+        while enemyhp>0 and health>=1:
+            health=health-enemydam
+            print('The enemy did',enemydam,'damage','you have', health,'health')
+            if health>=1:
+                enemyhp=enemyhp-playerdam
+                print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n')
+            elif health<=0:
+                print("you die")
+                break
         if enemyhp<=0:
             choice2()
     elif c3b=='flee':
@@ -137,4 +146,3 @@ if __name__ == '__main__':
     enemy = (enemy[random.randint(0,1)])
 
     scene1()
-
