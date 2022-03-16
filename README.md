@@ -1,2 +1,2 @@
 # co-r
-<title> about the project </title>
+## about the project 
