@@ -55,6 +55,7 @@ def villageinn(healamount):
     print('you enter the inn\n')
     choiceinn=input('for 100 gold you can rest to full hp. Would you like to do so?\n')
     if choiceinn=='yes' or choiceinn=='y':
+        health=100
         print("you heal for {}".format(healamount))
         print("Now healed you leave the village and return to the crossroads")
         choice2()
@@ -159,4 +160,3 @@ if __name__ == '__main__':
     enemy = (enemy[random.randint(0,1)])
 
     scene1()
-
