@@ -3,6 +3,7 @@
 #imports are always on top
 import random
 gold=0
+xp=1
 health = 100
 playerlevel = 1
 enemylevel = 0
@@ -64,9 +65,11 @@ def villageinn(healamount):
 
 ##code for graveyard battle
 def attack2():
+    global xp
     global gold
     global health
     global enemyhp
+    global playerlevel
     enemyhp=enemylevel*50
     print('A level',enemylevel,enemy,' appears it has', enemyhp,'hp')
     c3b=input('fight or flee?\n')
@@ -82,6 +85,7 @@ def attack2():
                 break
         if enemyhp<=0:
             gold+=50
+            xp+=enemylevel
             choice2()
     elif c3b=='flee':
         choice2()
@@ -90,6 +94,7 @@ def attack2():
 
 ##start code for cave battle
 def attack1():
+    global xp
     global gold
     global c2a
     global enemyhp
@@ -106,6 +111,7 @@ def attack1():
             print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n') 
         if enemyhp<=0:
             gold+=100
+            xp+=enemylevel
             win1=True
             scene1()
     elif c3b=='flee' and c2a=='north' or c2a=='n':
