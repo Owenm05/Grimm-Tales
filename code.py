@@ -22,16 +22,13 @@ def ending2():
     print ('A goblin horde surrounds you and defeats you')
     print('you die')
     print('you unlocked the second ending')
-def ending3():
-    print('you died in your sleep')
-    print('you reached the third ending')
 ##end code for ending
 
 
 ##gives the user the choices for the right path
 def choice2():
     global gold
-    print('You go east\n north of you you see a village \n to the northwest you see a forest and to the northeast you see a graveyard\n')
+    print('North of you you see a village \n to the northwest you see a forest and to the northeast you see a graveyard\n')
     choicetwob=input('choose either n, nw or ne\n')
     if choicetwob== 'northeast' or choicetwob== 'ne':
         print('You walk into the graveyard')
@@ -45,7 +42,7 @@ def choice2():
             gold-=100
             villageinn(100)
         elif gold<100:
-            print("You can not afford to heal you have {} gold".format(gold))
+            print("You can not afford to heal you are {} gold short".format(100-gold))
         if village=='no' or village=='n':
             print("You decide to leave the village and return to the crossroad")
             choice2()
@@ -57,7 +54,9 @@ def villageinn(healamount):
     print('you enter the inn\n')
     choiceinn=input('for 100 gold you can rest to full hp. Would you like to do so?\n')
     if choiceinn=='yes' or choiceinn=='y':
-        ending3()
+        print("you heal for {}".format(healamount))
+        print("Now healed you leave the village and return to the crossroads")
+        choice2()
     elif choiceinn=='no' or choiceinn=='n':
         print('you have have gone too far there is no turning back')
 ##end code for village
@@ -65,6 +64,7 @@ def villageinn(healamount):
 
 ##code for graveyard battle
 def attack2():
+    global gold
     global health
     global enemyhp
     enemyhp=enemylevel*50
@@ -81,6 +81,7 @@ def attack2():
                 print("you die")
                 break
         if enemyhp<=0:
+            gold+=50
             choice2()
     elif c3b=='flee':
         choice2()
@@ -89,6 +90,7 @@ def attack2():
 
 ##start code for cave battle
 def attack1():
+    global gold
     global c2a
     global enemyhp
     global win1
@@ -103,6 +105,7 @@ def attack1():
             enemyhp=enemyhp-playerdam
             print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n') 
         if enemyhp<=0:
+            gold+=100
             win1=True
             scene1()
     elif c3b=='flee' and c2a=='north' or c2a=='n':
@@ -150,3 +153,4 @@ if __name__ == '__main__':
     enemy = (enemy[random.randint(0,1)])
 
     scene1()
+
