@@ -2,7 +2,7 @@
    
 #imports are always on top
 import random
-
+gold=0
 health = 100
 playerlevel = 1
 enemylevel = 0
@@ -30,6 +30,7 @@ def ending3():
 
 ##gives the user the choices for the right path
 def choice2():
+    global gold
     print('You go east\n north of you you see a village \n to the northwest you see a forest and to the northeast you see a graveyard\n')
     choicetwob=input('choose either n, nw or ne\n')
     if choicetwob== 'northeast' or choicetwob== 'ne':
@@ -40,11 +41,14 @@ def choice2():
     elif choicetwob=='n':
         print('you enter the village')
         village=input('as you enter the village one establishment stands out to you, the inn do you want to enter the inn?\n')
-        if village=='yes' or village=='y':
+        if village=='yes' or village=='y' and gold>=100:
+            gold-=100
             villageinn(100)
-        elif village=='no':
-            print('you dont have a choice')
-            villageinn()
+        elif gold<100:
+            print("You can not afford to heal you have {} gold".format(gold))
+        if village=='no' or village=='n':
+            print("You decide to leave the village and return to the crossroad")
+            choice2()
 
 
 ##code for the village
