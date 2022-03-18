@@ -11,7 +11,7 @@ enemyhp = 0
 c2a = ''
 enemy = ['bat','undead soldier']
 win1 = False
-
+bosshp=500
 
 ##start code for game endings
 def ending1():
@@ -19,10 +19,9 @@ def ending1():
     print('You decide to leave the cave and emerge through a grove of trees into a forest')
     print('You settle down and live out the rest of your days alone in the peaceful forest\n')
     print('congrats you reached the first ending')
-def ending2():
-    print ('A goblin horde surrounds you and defeats you')
-    print('you die')
-    print('you unlocked the second ending')
+def bossfight():
+    print("A goblin king appears, he towers over you")
+    attack3()
 ##end code for ending
 
 
@@ -35,7 +34,7 @@ def choice2():
         print('You walk into the graveyard')
         attack2()
     elif choicetwob=='nw':
-        ending2()
+        bossfight()
     elif choicetwob=='n':
         print('you enter the village')
         village=input('as you enter the village one establishment stands out to you, the inn do you want to enter the inn?\n')
@@ -64,7 +63,7 @@ def villageinn(healamount):
 ##end code for village
 
 
-##code for graveyard battle
+##code for battles battle
 def attack2():
     global xp
     global gold
@@ -87,13 +86,30 @@ def attack2():
         if enemyhp<=0:
             gold+=50
             xp+=enemylevel
+            if xp>=playerlevel*10:
+                xp=(xp-(playerlevel*10))
+                playerlevel+=1
+                print("you leveled up, you level is now",playerlevel)
             choice2()
     elif c3b=='flee':
         choice2()
-##end code for graveyard battle
-
-
-##start code for cave battle
+def attack3():
+    global gold
+    global c2a
+    global bosshp
+    global health
+    print('A Goblin King appears it has', bosshp,'hp')
+    while bosshp>0 and health>=0:
+        bossdam=random.randint(20,100)
+        health=health-bossdam
+        print('The enemy did',bossdam,'damage','you have', health,'health')
+        bosshp=bosshp-playerdam
+        print('You did',playerdam,'damage','the enemy has', bosshp,'hp\n') 
+    if bosshp<=0:
+        gold+=1000
+        print("you win")
+    if health<=0:
+        print("you died \ngame over")
 def attack1():
     global xp
     global gold
@@ -101,11 +117,12 @@ def attack1():
     global enemyhp
     global win1
     global health
+    global enemydam
     enemyhp=enemylevel*50
     print('A level',enemylevel,enemy,' appears it has', enemyhp,'hp')
     c3b=input('fight or flee?\n')
     if c3b=='fight':
-        while enemyhp>0:
+        while enemyhp>0 and health>=0:
             health=health-enemydam
             print('The enemy did',enemydam,'damage','you have', health,'health')
             enemyhp=enemyhp-playerdam
@@ -117,8 +134,8 @@ def attack1():
             scene1()
     elif c3b=='flee' and c2a=='north' or c2a=='n':
         scene1()
-##end code for graveyard battle
 
+##end code for battles
 
 ##code for the inital choice
 def scene1():
@@ -158,5 +175,4 @@ if __name__ == '__main__':
     playerdam = random.randint(50,100)
     enemynumber = random.randint(0,1)
     enemy = (enemy[random.randint(0,1)])
-
     scene1()
