@@ -38,4 +38,4 @@ For any further questions feel free to contact me.
 
 ## License
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+This project is licensed under the GPLv3 License - see the LICENSE.md file for details
