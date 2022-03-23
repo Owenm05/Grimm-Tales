@@ -1,3 +1,4 @@
 ## About the project 
 ---
-To Do
+This is a text based Rpg. 
+this can be run by {placeholder}
