@@ -32,7 +32,7 @@ For any further questions feel free to contact me.
 
 * 0.2
     * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
+    * See [commit change\]() or See [https://github.com/Owenm05/Grimm-Tales/commits/main]()
 * 0.1
     * Initial Release
 
