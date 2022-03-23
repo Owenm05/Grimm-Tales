@@ -32,7 +32,7 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 
 * 0.2
     * Various bug fixes and optimizations
-    * See commit[5ec119e]
+    * See commit [5ec119e]
 * 0.1
     * Initial Release
 
