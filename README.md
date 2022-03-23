@@ -32,7 +32,7 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 
 * 0.2
     * Various bug fixes and optimizations
-    * See commit [5ec119e]
+    * See [commit](https://github.com/Owenm05/Grimm-Tales/commit/32d7b686396196ead3fbb10144a3afb274d5b2d5)
 * 0.1
     * Initial Release
 
