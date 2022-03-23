@@ -19,7 +19,7 @@ python 3.9
 
 ## Help
 
-For any further questions feel free to contact me.
+For any further questions feel free to contact me at mautustrike@gmail.com
 
 ## Authors
 * Created by Owenm05 
