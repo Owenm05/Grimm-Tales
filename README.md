@@ -12,9 +12,9 @@ python 3.9
 
 ### Executing program
 
-*To run the program download python 3.9 or better 
-*then copy the code in code.py 
-*finally pasteb the code into a new python file and press run
+* To run the program download python 3.9 or better 
+* then copy the code in code.py 
+* finally paste the code into a new python file and press run
 * Step-by-step bullets
 
 ## Help
