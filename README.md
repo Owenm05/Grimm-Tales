@@ -22,7 +22,7 @@ python 3.9
 For any further questions feel free to contact me.
 
 ## Authors
-*Created by Owenm05 
+* Created by Owenm05 
 
 ### Contributors names
 
