@@ -29,10 +29,10 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 * Areso
 
 ## Version History
-*0.5.5
+* 0.5.5
     * Fixed bug with boss fight
     * Added comfirmation for boss fight
-    *see [commit](https://github.com/Owenm05/Grimm-Tales/commit/0651d360da2d0c8a84b9bed26e3ef8b7faf8f7ad) for updates
+    * see [commit](https://github.com/Owenm05/Grimm-Tales/commit/0651d360da2d0c8a84b9bed26e3ef8b7faf8f7ad) for updates
 * 0.5
     * Various bug fixes and optimizations
     * See [commit](https://github.com/Owenm05/Grimm-Tales/commit/32d7b686396196ead3fbb10144a3afb274d5b2d5)
