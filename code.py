@@ -20,7 +20,6 @@ def ending1():
     print('You settle down and live out the rest of your days alone in the peaceful forest\n')
     print('congrats you reached the first ending')
 def bossfight():
-    print("A goblin king appears, he towers over you")
     attack3()
 ##end code for ending
 def status():
@@ -107,20 +106,25 @@ def attack3():
     global health
     global playerdam
     randoms()
-    playerdam=playerdam+(2^playerdam)
-    print('A Goblin King appears it has', bosshp,'hp')
-    while bosshp>0 and health>=0:
-        bossdam=random.randint(20,100)
-        health=health-bossdam
-        print('The enemy did',bossdam,'damage','you have', health,'health')
-        bosshp=bosshp-playerdam
-        print('You did',playerdam,'damage','the enemy has', bosshp,'hp\n') 
-    if bosshp<=0:
-        gold+=1000
-        status()
-        print("you win")
-    if health<=0:
-        print("you died \n game over")
+    lastChance=input("Are you sure you want to progress, there is a strong enemy ahead?\n")
+    if lastChance=='turn back' or lastChance=='back' or lastChance=='no':
+        choice2()
+    else:
+        print("A goblin king appears, he towers over you")
+        playerdam=playerdam+(2^playerdam)
+        print('A Goblin King appears it has', bosshp,'hp')
+        while bosshp>0 and health>=0:
+            bossdam=random.randint(20,100)
+            health=health-bossdam
+            print('The enemy did',bossdam,'damage','you have', health,'health')
+            bosshp=bosshp-playerdam
+            print('You did',playerdam,'damage','the enemy has', bosshp,'hp\n') 
+        if bosshp<=0 and health>0:
+            gold+=1000
+            status()
+            print("you win")
+        if health<=0:
+            print("you died \n game over")
 def attack1():
     global enemy
     global xp
@@ -130,6 +134,7 @@ def attack1():
     global win1
     global health
     global enemydam
+    global playerdam
     randoms()
     enemyhp=enemylevel*50
     playerdam=playerdam+(2^playerlevel)
@@ -193,3 +198,4 @@ def randoms():
     enemydam = random.randint(5,10)
     playerdam = random.randint(50,100)
 scene1()
+
