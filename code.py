@@ -1,6 +1,4 @@
-
-   
-   
+  
 #imports are always on top
 import random
 gold=0
@@ -15,7 +13,7 @@ win1 = False
 bosshp=500
 ##starting intro to game
 print(" Hello there! Welcome to the world of Grimm!")
-print("\nMy name is Arcus but you can call me The Narrator of this story!")
+print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
 print("\nThis world is a vast place, called Grimm inhabited by many creatures\n")
 ##start code for game endings
 ##trying to remove most deadends
