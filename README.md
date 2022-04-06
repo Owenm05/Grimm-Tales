@@ -29,6 +29,8 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 * Areso
 
 ## Version History
+* 0.5.6
+    * Added Intro
 * 0.5.5
     * Fixed bug with boss fight
     * Added comfirmation for boss fight
