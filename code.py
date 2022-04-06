@@ -1,5 +1,6 @@
 
    
+   
 #imports are always on top
 import random
 gold=0
@@ -12,8 +13,12 @@ c2a = ''
 enemy = ['bat','undead soldier']
 win1 = False
 bosshp=500
-
+##starting intro to game
+print(" Hello there! Welcome to the world of Grimm!")
+print("\nMy name is Arcus but you can call me The Narrator of this story!")
+print("\nThis world is a vast place, called Grimm inhabited by many creatures\n")
 ##start code for game endings
+##trying to remove most deadends
 def ending1():
     print('As you enter the cave the ceiling collapses behind you')
     print('You decide to leave the cave and emerge through a grove of trees into a forest')
@@ -160,7 +165,7 @@ def attack1():
 ##code for the inital choice
 def scene1():
     global c2a
-    c1=input('You are at a crossroad,Do you want to move west or move east?\n')
+    c1=input(' You find yourself in the center of a crossroad,Do you want to move west or move east? (type commands like w or west) \n')
     if c1=='east' or c1=='e':
         choice2()
         return
@@ -198,4 +203,3 @@ def randoms():
     enemydam = random.randint(5,10)
     playerdam = random.randint(50,100)
 scene1()
-
