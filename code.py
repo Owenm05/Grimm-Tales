@@ -1,4 +1,4 @@
-  
+   
 #imports are always on top
 import random
 gold=0
@@ -11,6 +11,7 @@ c2a = ''
 enemy = ['bat','undead soldier']
 win1 = False
 bosshp=500
+rank=" "
 ##starting intro to game
 print(" Hello there! Welcome to the world of Grimm!")
 print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
@@ -28,8 +29,12 @@ def bossfight():
 def status():
     global playerlevel
     global xp
+    global rank
     print("your level is ",playerlevel,"\n")
     print("you have ",xp," xp \n")
+    if playerlevel%10==0:
+        rank=playerlevel/10
+        print(rank)
 
 ##gives the user the choices for the right path
 def choice2():
@@ -93,11 +98,10 @@ def attack2():
                 break
         if enemyhp<=0:
             gold+=50
+            xp+=enemylevel*5
+            playerlevel=xp/10
+            print("you leveled up, you level is now",playerlevel)
             status()
-            xp+=enemylevel
-            if xp==(playerlevel*10):
-                playerlevel+=1
-                print("you leveled up, you level is now",playerlevel)
             choice2()
     elif c3b=='flee':
         choice2()
@@ -150,9 +154,9 @@ def attack1():
             enemyhp=enemyhp-playerdam
             print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n') 
         if enemyhp<=0:
+            xp+=enemylevel*5
             status()
             gold+=100
-            xp+=enemylevel
             win1=True
             scene1()
     elif c3b=='flee' and c2a=='north' or c2a=='n':
@@ -201,3 +205,4 @@ def randoms():
     enemydam = random.randint(5,10)
     playerdam = random.randint(50,100)
 scene1()
+
