@@ -1,6 +1,9 @@
+
+   
    
 #imports are always on top
 import random
+import math
 gold=0
 xp=1
 health = 100
@@ -30,11 +33,10 @@ def status():
     global playerlevel
     global xp
     global rank
-    print("your level is ",playerlevel,"\n")
-    print("you have ",xp," xp \n")
-    if playerlevel%10==0:
-        rank=playerlevel/10
-        print(rank)
+    print("your level is ",playerlevel,)
+    print("you have ",xp," xp ")
+    rank=math.floor(playerlevel/10)
+    print("your current rank is ",rank)
 
 ##gives the user the choices for the right path
 def choice2():
@@ -99,8 +101,8 @@ def attack2():
         if enemyhp<=0:
             gold+=50
             xp+=enemylevel*5
-            playerlevel=xp/10
-            print("you leveled up, you level is now",playerlevel)
+            playerlevel=math.floor(xp/10)
+            ##print("you leveled up, you level is now",playerlevel)
             status()
             choice2()
     elif c3b=='flee':
@@ -205,4 +207,3 @@ def randoms():
     enemydam = random.randint(5,10)
     playerdam = random.randint(50,100)
 scene1()
-
