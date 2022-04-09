@@ -4,17 +4,22 @@
 #imports are always on top
 import random
 import math
-gold=0
-xp=1
-health = 100
-playerlevel = 1
-enemylevel = 0
-enemyhp = 0
+game = {}
+game["gold"] = 0
+game["xp"] = 1
+game['health'] = 100
+game['player_level'] = 1
+game['enemy_level'] = 1
+game['enemy_hp'] = 0
+game['player_dmg'] = 0
+game['enemy_dmg'] = 0
+game['boss_hp'] = 500
+game['rank'] = " "
+
 c2a = ''
 enemy = ['bat','undead soldier']
 win1 = False
-bosshp=500
-rank=" "
+
 ##starting intro to game
 print(" Hello there! Welcome to the world of Grimm!")
 print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
@@ -30,17 +35,15 @@ def bossfight():
     attack3()
 ##end code for ending
 def status():
-    global playerlevel
-    global xp
-    global rank
-    print("your level is ",playerlevel,)
-    print("you have ",xp," xp ")
-    rank=math.floor(playerlevel/10)
-    print("your current rank is ",rank)
+    global game
+    print("your level is ",game['player_level'],)
+    print("you have ",game['xp']," xp ")
+    game['rank']=math.floor(game['player_level']/10)
+    print("your current rank is ", game['rank'])
 
 ##gives the user the choices for the right path
 def choice2():
-    global gold
+    global game
     print('North of you you see a village \n to the northwest you see a forest and to the northeast you see a graveyard\n')
     choicetwob=input('choose either n, nw or ne\n')
     if choicetwob== 'northeast' or choicetwob== 'ne':
@@ -51,11 +54,11 @@ def choice2():
     elif choicetwob=='n':
         print('you enter the village')
         village=input('as you enter the village one establishment stands out to you, the inn do you want to enter the inn?\n')
-        if village=='yes' or village=='y' and gold>=100:
-            gold-=100
+        if village=='yes' or village=='y' and game['gold']>=100:
+            game['gold']-=100
             villageinn(100)
-        elif village=='yes' and gold<100:
-            print("You can not afford to heal you are {} gold short".format(100-gold))
+        elif village=='yes' and game['gold']<100:
+            print("You can not afford to heal you are {} gold short".format(100-game['gold']))
         if village=='no' or village=='n':
             print("You decide to leave the village and return to the crossroad")
             choice2()
@@ -63,11 +66,12 @@ def choice2():
 
 ##code for the village
 def villageinn(healamount):
-    global health
+    global game
     print('you enter the inn\n')
     choiceinn=input('for 100 gold you can rest to full hp. Would you like to do so?\n')
     if choiceinn=='yes' or choiceinn=='y':
-        health=100
+        game['health']=100
+        game['gold'] -= 100
         print("you heal for {}".format(healamount))
         print("Now healed you leave the village and return to the crossroads")
         choice2()
@@ -78,87 +82,79 @@ def villageinn(healamount):
 
 ##code for battles
 def attack2():
+    global game
     global enemy
-    global xp
-    global gold
-    global health
-    global enemyhp
-    global playerlevel
     randoms()
-    enemyhp=enemylevel*50
-    print('A level',enemylevel,enemy,' appears it has', enemyhp,'hp')
+    game['enemy_hp']=game['enemy_level']*50
+    print('A level',game['enemy_level'],enemy,' appears it has', game['enemy_hp'],'hp')
     c3b=input('fight or flee?\n')
     if c3b=='fight':
-        while enemyhp>0 and health>=1:
-            health=health-enemydam
-            print('The enemy did',enemydam,'damage','you have', health,'health')
-            if health>=1:
-                enemyhp=enemyhp-playerdam
-                print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n')
-            elif health<=0:
+        while game['enemy_hp']>0 and game['health']>=1:
+            game['health']=game['health']-game['enemy_dmg']
+            print('The enemy did',game['enemy_dmg'],'damage','you have', game['health'],'health')
+            if game['health']>=1:
+                game['enemy_hp']=game['enemy_hp']-game['player_dmg']
+                print('You did',game['player_dmg'],'damage','the enemy has', game['enemy_hp'],'hp\n')
+            elif game['health']<=0:
                 print("you die")
                 break
-        if enemyhp<=0:
-            gold+=50
-            xp+=enemylevel*5
-            playerlevel=math.floor(xp/10)
+        if game['enemy_hp']<=0:
+            game['gold']+=50
+            game['xp']+=game['enemy_level']*5
+            game['player_level']=math.floor(game['xp']/10)
             ##print("you leveled up, you level is now",playerlevel)
             status()
             choice2()
     elif c3b=='flee':
         choice2()
+
+
 def attack3():
+    global game
     global enemy
-    global gold
     global c2a
-    global bosshp
-    global health
-    global playerdam
     randoms()
     lastChance=input("Are you sure you want to progress, there is a strong enemy ahead?\n")
     if lastChance=='turn back' or lastChance=='back' or lastChance=='no':
         choice2()
     else:
         print("A goblin king appears, he towers over you")
-        playerdam=playerdam+(2^playerdam)
-        print('A Goblin King appears it has', bosshp,'hp')
-        while bosshp>0 and health>=0:
+        game['player_dmg']=game['player_dmg']+(2^game['player_dmg'])
+        print('A Goblin King appears it has', game['boss_hp'],'hp')
+        while game['boss_hp']>0 and game['health']>=0:
             bossdam=random.randint(20,100)
-            health=health-bossdam
-            print('The enemy did',bossdam,'damage','you have', health,'health')
-            bosshp=bosshp-playerdam
-            print('You did',playerdam,'damage','the enemy has', bosshp,'hp\n') 
-        if bosshp<=0 and health>0:
-            gold+=1000
+            game['health']=game['health']-bossdam
+            print('The enemy did',bossdam,'damage','you have', game['health'],'health')
+            game['boss_hp']=game['boss_hp']-game['player_dmg']
+            print('You did',game['player_dmg'],'damage','the enemy has', game['boss_hp'],'hp\n')
+        if game['boss_hp']<=0 and game['health']>0:
+            game['gold']+=1000
             status()
             print("you win")
-        if health<=0:
+        if game['health']<=0:
             print("you died \n game over")
+
+
 def attack1():
+    global game
     global enemy
-    global xp
-    global gold
     global c2a
-    global enemyhp
     global win1
-    global health
-    global enemydam
-    global playerdam
     randoms()
-    enemyhp=enemylevel*50
-    playerdam=playerdam+(2^playerlevel)
-    print('A level',enemylevel,enemy,' appears it has', enemyhp,'hp')
+    game['enemy_hp']=game['enemy_level']*50
+    playerdam=game['player_dmg']+(2^game['player_level'])
+    print('A level',game['enemy_level'],enemy,' appears it has', game['enemy_hp'],'hp')
     c3b=input('fight or flee?\n')
     if c3b=='fight':
-        while enemyhp>0 and health>=0:
-            health=health-enemydam
-            print('The enemy did',enemydam,'damage','you have', health,'health')
-            enemyhp=enemyhp-playerdam
-            print('You did',playerdam,'damage','the enemy has', enemyhp,'hp\n') 
-        if enemyhp<=0:
-            xp+=enemylevel*5
+        while game['enemy_hp']>0 and game['health']>=0:
+            game['health']=game['health']-game['enemy_dmg']
+            print('The enemy did',game['enemy_dmg'],'damage','you have', game['health'],'health')
+            game['enemy_hp']=game['enemy_hp']-game['player_dmg']
+            print('You did',game['player_dmg'],'damage','the enemy has', game['enemy_hp'],'hp\n')
+        if game['enemy_hp']<=0:
+            game['xp']+=game['enemy_level']*5
             status()
-            gold+=100
+            game['gold']+=100
             win1=True
             scene1()
     elif c3b=='flee' and c2a=='north' or c2a=='n':
@@ -168,6 +164,7 @@ def attack1():
 
 ##code for the inital choice
 def scene1():
+    global game
     global c2a
     c1=input(' You find yourself in the center of a crossroad,Do you want to move west or move east? (type commands like w or west) \n')
     if c1=='east' or c1=='e':
@@ -197,13 +194,12 @@ def scene1():
 '''
 
 ##running all the functions to run the code
-enemy = (enemy[random.randint(0,1)])
+enemy = (enemy[random.randint(0, 1)])
+
 def randoms():
-    global enemylevel
-    global playerdam
-    global enemydam
+    global game
     ## code for randomized variable
-    enemylevel = random.randint(1,5)
-    enemydam = random.randint(5,10)
-    playerdam = random.randint(50,100)
+    game['enemy_level'] = random.randint(1,5)
+    game['enemy_dmg'] = random.randint(5,10)
+    game['player_dmg'] = random.randint(50,100)
 scene1()
