@@ -8,12 +8,12 @@ This is a text based rpg that is ran in the python terminal.
 
 ### Dependencies
 
-python 3.9
+python 3.6
 
 ### Executing program
 
-* To run the program download python 3.9 or better 
-* then copy the code in code.py 
+* To run the program download python 3.6 or newer 
+* then copy the code from code.py 
 * finally paste the code into a new python file and press run
 * Step-by-step bullets
 
