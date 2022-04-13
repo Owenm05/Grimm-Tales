@@ -87,7 +87,7 @@ def village_scene():
         print("You can not afford to heal you are {} gold short".format(100 - game.gold))
     elif village == 'shop':
         enter_village_shop()
-    if village == 'no' or village == 'n' or village == 'exit' or village == 'leave':
+    if village == 'no' or village == 'n' or village == 'exit' or village == 'leave' or village == 'road':
         print("You decide to leave the village and return to the crossroad")
         eastern_scene()
 
@@ -96,7 +96,7 @@ def village_scene():
 def enter_village_shop():
     global game
     shop_choice = input('''you see healing drinks, 25g each, and 
-                       the damassk steel sword for 200g. 
+                       the damassk steel sword for 1,000g. 
                        You have {} gold.
                        What would you like to buy? drinks or the sword?
                        Or you wanna leave?'''.format(game.gold))
@@ -112,8 +112,8 @@ def enter_village_shop():
             print("you don't have enough money for that!")
             enter_village_shop()
     elif shop_choice == 'sword' or shop_choice == 'the sword' or shop_choice == 'the damassk steel sword':
-        if game.gold >= 200:
-            game.gold = game.gold - 200
+        if game.gold >= 1000:
+            game.gold = game.gold - 1000
             game.equipped.append("damassk sword")
             print("You bought your sword, swing it over your shoulder and headed to the exit")
             village_scene()
