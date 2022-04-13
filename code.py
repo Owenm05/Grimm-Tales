@@ -165,6 +165,8 @@ def attack_regular(previous_scene):
                     game.health    += 50
                     print("you drink a hp drink vital and restored 50 health by this")
                 game.enemy_hp = game.enemy_hp - player_dmg
+                if game.enemy_hp <= 0:
+                    game.enemy_hp=0
                 print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
             elif game.health <= 0:
                 print("you die")
@@ -228,7 +230,6 @@ def crossroads():
     game.location = "crossroads"
     # TBC - to be created by gods of the World
     print('''The World's Map on The Crossroads Sign:
-
     Dark Cave           TBC         Forest   Village   Graveyard
       ||                ||            \\\      ||      //
 TBC==West==========Crossroads================East============TBC
