@@ -21,10 +21,8 @@ class Game:
         self.prev_location = ""
         self.location = ""
 
-    def status(self):
-        print("your level is ", self.player_level, "; you have ", self.xp, " xp")
-        print("you have ", self.health, " hp; you have ", self.gold, " gold")
-        print("your current rank is ", self.rank)
+    def __str__(self):
+        return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
     def die(self):
         print("you just died")
@@ -48,31 +46,31 @@ def western_scene():
         print('You move into the dark cave\n')
         diceD20 = random.randrange(1, 20)
         if diceD20 <= 18:
-            attack_regular("western_scene")
+            attack_regular(western_scene)
         else:
             ending_cave_collapsed()
     elif decision == 'south' or decision == 'back' or decision == 'turn back':
         print('You move back to the crossroads ')
-        game.prev_location = "western_scene"
+        game.prev_location = western_scene
         crossroads()
 
 
 # #gives the user the choices for the right path
 def eastern_scene():
     global game
-    game.location = "eastern_scene"
-    print('North of you you see a village \n to the northwest you see a forest and to the northeast you see a graveyard\n')
+    game.location = eastern_scene
+    print('North of you you see a village \nto the northwest you see a forest and to the northeast you see a graveyard\n')
     decision = input('choose either n, nw or ne\n')
     if decision == 'northeast' or decision == 'ne':
         print('You walk into the graveyard')
-        attack_regular("eastern_scene")
+        attack_regular(eastern_scene)
     elif decision == 'nw':
-        bossfight("eastern_scene")
+        bossfight(eastern_scene)
     elif decision == 'n':
-        game.prev_location = "eastern_scene"
+        game.prev_location = eastern_scene
         village_scene()
     elif decision == 'w' or decision == 'west':
-        game.prev_location = "eastern_scene"
+        game.prev_location = eastern_scene
         crossroads()
 
 
@@ -128,7 +126,7 @@ def enter_village_shop():
             print("You bought your trident, swung it over your shoulder and headed to the exit")
             village_scene()
         else:
-            print("you dont ahev enough money for that!")
+            print("you dont have enough money for that!")
             enter_village_shop()
             
             
@@ -168,6 +166,9 @@ def attack_regular(previous_scene):
         if 'damassk sword' in game.equipped:
             player_dmg += 100
             print('your attack is improved by your damassk sword')
+        elif 'trident' in game.equipped:
+            player_dmg += 50
+            print('your attack is improved  by your trident')
         while game.enemy_hp > 0 and game.health >= 1:
             game.health = game.health - game.enemy_dmg
             print('The enemy did', game.enemy_dmg, 'damage,', 'you have', game.health, 'health')
@@ -191,10 +192,10 @@ def attack_regular(previous_scene):
             if game.player_level > 1:
                 game.max_health = 100 + game.player_level * 5
             ##print("you leveled up, you level is now",playerlevel)
-            game.status()
-            globals()[previous_scene]()
+            print(game)
+            previous_scene()
     elif decision == 'flee':
-        globals()[previous_scene]()
+        previous_scene()
 
 
 def bossfight(previous_scene):
@@ -202,8 +203,9 @@ def bossfight(previous_scene):
     global enemy
     randoms()
     decision = input("Are you sure you want to progress, there is a strong enemy ahead?\n")
+    
     if decision == 'turn back' or decision == 'back' or decision == 'no':
-        globals()[previous_scene]()
+        previous_scene()
     else:
         print("A Goblin King appears, he towers over you")
         print('And he has', game.boss_hp, 'hp')
@@ -211,6 +213,9 @@ def bossfight(previous_scene):
         if 'damassk sword' in game.equipped:
             player_dmg += 100
             print('your attack is improved by your damassk sword')
+        if 'trident' in game.equipped:
+            player_dmg += 50
+            print('your attack is improved by your trident')
         while game.boss_hp > 0 and game.health >= 0:
             bossdam = random.randint(20, 100)
             game.health = game.health - bossdam
@@ -229,7 +234,7 @@ def bossfight(previous_scene):
                 game.max_health = 100 + game.player_level * 5
             game.status()
             print("you win")
-            globals()[previous_scene]()
+            previous_scene()
         if game.health <= 0:
             print("you died \n game over")
 
@@ -253,11 +258,11 @@ TBC==West==========Crossroads================East============TBC
 Do you want to move west or move east? (type commands like w or west) \n''')
 
     if decision == 'east' or decision == 'e':
-        game.prev_location = "crossroads"
+        game.prev_location = crossroads
         eastern_scene()
         return
     if decision == 'west' or decision == 'w':
-        game.prev_location = "crossroads"
+        game.prev_location = crossroads
         western_scene()
 ##end code for the crossroads scene
 
