@@ -20,7 +20,7 @@ class Game:
         self.equipped = []
         self.prev_location = ""
         self.location = ""
-
+        self.key_items = []
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
@@ -73,6 +73,16 @@ def eastern_scene():
         game.prev_location = eastern_scene
         crossroads()
 
+def northern_scene():
+    global game
+    game.location = northern_scene
+    print('Two colossal stone statues stand on the sides of a gigantic stone gate.\nUpon closer inspection of the gate you find a keyhole at the base of one of the doors.')
+    if 'ancient key' in game.key_items:
+        print(" you unlock the gate with the ancient key. \n The sound of a powerful mechcanism at work can be heard as the gate slowly opens.\nIn the distance you see a mountain range commonly called The Severed Highlands.\n Would you like to go to The Severed Highlands, or turn back?")
+        decision = input('choose either n, or s')
+        if decision == 'north' or decision == 'n':
+            print('You walk to the base of the nearest mountain')
+                ##add mountain code
 
 def village_scene():
     print('you entered the village')
@@ -233,7 +243,8 @@ def bossfight(previous_scene):
             if game.player_level > 1:
                 game.max_health = 100 + game.player_level * 5
             game.status()
-            print("you win")
+            game.key_items.append('ancient key')
+            print("you have obtained the ancient key, maybe it opens something?")
             previous_scene()
         if game.health <= 0:
             print("you died \n game over")
@@ -247,7 +258,11 @@ def crossroads():
     game.location = "crossroads"
     # TBC - to be created by gods of the World
     print('''The World's Map on The Crossroads Sign:
-    Dark Cave           TBC         Forest   Village   Graveyard
+              The Severed Highlands
+                        ||
+                  Colossal Gate
+                        ||
+    Dark Cave           North         Forest   Village   Graveyard
       ||                ||            \\\      ||      //
 TBC==West==========Crossroads================East============TBC
       ||                ||                     ||
@@ -255,7 +270,7 @@ TBC==West==========Crossroads================East============TBC
           ''')
     decision = input(
         '''You find yourself at The Crossroad, which seems the center of the world.
-Do you want to move west or move east? (type commands like w or west) \n''')
+Do you want to move west, north, or move east? (type commands like w or west) \n''')
 
     if decision == 'east' or decision == 'e':
         game.prev_location = crossroads
@@ -264,6 +279,9 @@ Do you want to move west or move east? (type commands like w or west) \n''')
     if decision == 'west' or decision == 'w':
         game.prev_location = crossroads
         western_scene()
+    if decision == 'north' or decision == 'n':
+        game.prev_location = crossroads
+        northern_scene()
 ##end code for the crossroads scene
 
 
@@ -285,3 +303,4 @@ if __name__ == "__main__":
     print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
     print("\nThis world is a vast place, called Grimm inhabited by many creatures\n")
     crossroads()
+
