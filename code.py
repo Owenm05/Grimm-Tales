@@ -81,6 +81,13 @@ def eastern_scene():
     elif decision == 'w' or decision == 'west':
         game.prev_location = eastern_scene
         crossroads()
+    elif decision == 'help' or decision == 'h':
+        print('ne, n, nw, w\n')
+        eastern_scene()
+    else:
+        print('sorry, no such option is available\n')
+        eastern_scene()
+
 
 def northern_scene():
     global game
@@ -197,7 +204,7 @@ def enter_village_shop():
     elif shop_choice == 'trident':
         if game.gold >= 500:
             game.gold = game.gold - 1000
-            game.equiped_weapon.append("trident")
+            game.equipped_weapon.append("trident")
             print("You bought your trident, swung it over your shoulder and headed to the exit")
             village_scene()
         else:
@@ -230,10 +237,10 @@ def villageinn():
 def get_hero_dmg():
     global game, gconfig
     calc_player_dmg = game.player_dmg + (2 ^ game.player_level)
-    if 'damassk sword' in game.equipped:
+    if 'damassk sword' in game.equipped_weapon:
         calc_player_dmg += gconfig.damask_sword_atk
         print('your attack is improved by your damassk sword')
-    elif 'trident' in game.equipped:
+    elif 'trident' in game.equipped_weapon:
         calc_player_dmg += gconfig.trident_atk
         print('your attack is improved by your trident')
     return calc_player_dmg
@@ -278,7 +285,7 @@ def attack_regular(previous_scene):
         previous_scene()
     else:
         print('no such way!')
-        attack_regular()
+        attack_regular(previous_scene)
 
 
 def bossfight(previous_scene):
@@ -308,7 +315,7 @@ def bossfight(previous_scene):
             game.player_level = math.floor(game.xp / 10)
             if game.player_level > 1:
                 game.max_health = 100 + game.player_level * 5
-            game.status()
+            print(game)
             game.key_items.append('ancient key')
             print("you have obtained the ancient key, maybe it opens something?")
             previous_scene()
