@@ -22,6 +22,9 @@ class Game:
         self.location = ""
         self.key_items = []
         self.equipped_chest = []
+        self.equipped_legs = []
+        self.equipped_feet = []
+        self.equipped_head = []
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
@@ -50,7 +53,7 @@ def western_scene():
     global game
     game.location = "western scene"
     print('You moved west')
-    decision = input('You see a dark cave ahead of you to the north\n Do you move north or turn back?\n')
+    decision = input('You see a dark cave ahead of you to the north\n And a Sandy Beach to the west of you \nDo you move north, move west, or turn back?\n')
     if decision == 'north' or decision == 'n':
         print('You move into the dark cave\n')
         diceD20 = random.randrange(1, 20)
@@ -62,14 +65,18 @@ def western_scene():
         print('You move back to the crossroads ')
         game.prev_location = western_scene
         crossroads()
+    elif decision == 'west' or decision == 'w':
+        print('you run to the sandy beach and dip your feet in the water')
+        game.prev_location = western_scene
+        beach_scene()
 
 
 # #gives the user the choices for the right path
 def eastern_scene():
     global game
     game.location = eastern_scene
-    print('North of you you see a village \nto the northwest you see a forest and to the northeast you see a graveyard\n')
-    decision = input('choose either n, nw or ne\n')
+    print('North of you you see a village\nto the west of you is a crossroad \nto the northwest you see a forest, south of you you see a partal that appears to be broken,  and to the northeast you see a graveyard\n')
+    decision = input('choose either n, w, nw or ne\n')
     if decision == 'northeast' or decision == 'ne':
         print('You walk into the graveyard')
         attack_regular(eastern_scene)
@@ -103,8 +110,8 @@ def northern_scene():
 def southern_scene():
     global game
     game.location = southern_scene
-    print('A vast expanse of golden sand stretches out just to the south of of you. The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n')
-    decision = input('choose either n, merchant, or s')
+    print('A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n')
+    decision = input('choose either north, merchant, or south\n')
     if decision == 'north' or decision == 'n':
         print('You walk back to the crossroad')
         game.prev_location = southern_scene
@@ -120,7 +127,6 @@ def southern_scene():
             print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
             southern_scene()
 
-
 def golden_dunes_scene():
     global game
     game.location = golden_dunes_scene
@@ -130,31 +136,68 @@ def golden_dunes_scene():
 
 def enter_desert_market():
     global game
-    shop_choice = input('''you see healing drinks, 50g each,
-                       and a desert chestplate for 200g. 
-                       You have {} gold.
-                       What would you like to buy? drinks, or the desert chestplate?
-                       Or you wanna leave?'''.format(game.gold))
-    if (shop_choice == 'drink' or shop_choice == 'drinks'
-            or shop_choice == 'healing drink' or shop_choice == 'healing drinks'):
-        amount = input('input how many drinks you would like to buy\n')
-        if game.gold >= int(amount) * 50:
-            game.gold = game.gold - int(amount) * 50
-            game.hp_drinks += int(amount)
-            print("You bought your drinks and headed to the exit")
-            southern_scene()
-        else:
-            print("you don't have enough money for that!")
-            enter_desert_market()
-    elif shop_choice == 'chestplate' or shop_choice == 'desert chestplate' or shop_choice == 'the desert chestplate':
-        if game.gold >= 200:
-            game.gold = game.gold - 200
-            game.equipped_chest.append("desert chestplate")
-            print("You bought your chestplate, equipped it and headed to the exit")
-            southern_scene()
-        else:
-            print("you don't have enough money for that!")
-            enter_desert_market()
+    if game.player_level<50:
+        shop_choice = input('''you see healing drinks, 50g each,
+                           and a desert chestplate for 200g. 
+                           You have {} gold.
+                           What would you like to buy? drinks, or the desert chestplate?
+                           Or you wanna leave?\n'''.format(game.gold))
+        if (shop_choice == 'drink' or shop_choice == 'drinks'
+                or shop_choice == 'healing drink' or shop_choice == 'healing drinks'):
+            amount = input('input how many drinks you would like to buy\n')
+            if game.gold >= int(amount) * 50:
+                game.gold = game.gold - int(amount) * 50
+                game.hp_drinks += int(amount)
+                print("You bought your drinks and headed to the exit")
+                southern_scene()
+            else:
+                print("you don't have enough money for that!")
+                enter_desert_market()
+        elif shop_choice == 'chestplate' or shop_choice == 'desert chestplate' or shop_choice == 'the desert chestplate':
+            if game.gold >= 200:
+                game.gold = game.gold - 200
+                game.equipped_chest.append("desert chestplate")
+                print("You bought your chestplate, equipped it and headed to the exit")
+                southern_scene()
+            else:
+                print("you don't have enough money for that!")
+                enter_desert_market()
+    elif game.player_level>=50:
+        shop_choice = input('''you see healing drinks for 50g each, A Scarab Blade for 5000g,
+                           and a desert chestplate for 200g. 
+                           You have {} gold.
+                           What would you like to buy? drinks, or the desert chestplate?
+                           Or you wanna leave?\n'''.format(game.gold))
+        if (shop_choice == 'drink' or shop_choice == 'drinks'
+                or shop_choice == 'healing drink' or shop_choice == 'healing drinks'):
+            amount = input('input how many drinks you would like to buy\n')
+            if game.gold >= int(amount) * 50:
+                game.gold = game.gold - int(amount) * 50
+                game.hp_drinks += int(amount)
+                print("You bought your drinks and headed to the exit")
+                southern_scene()
+            else:
+                print("you don't have enough money for that!")
+                enter_desert_market()
+        elif shop_choice == 'chestplate' or shop_choice == 'desert chestplate' or shop_choice == 'the desert chestplate':
+            if game.gold >= 200:
+                game.gold = game.gold - 200
+                game.equipped_chest.append("desert chestplate")
+                print("You bought your chestplate, equipped it and headed to the exit")
+                southern_scene()
+            else:
+                print("you don't have enough money for that!")
+                enter_desert_market()
+        elif shop_choice == 'blade' or shop_choice == 'scarab blade' or shop_choice == 'a scarab blade':
+            if game.gold >= 5000:
+                game.gold = game.gold - 5000
+                game.equipped_weapon.append("scarab blade")
+                print("You bought a Scarab Blade, equipped it and headed to the exit")
+                southern_scene()
+            else:
+                print("you don't have enough money for that!")
+                enter_desert_market()
+            
 
 def village_scene():
     print('you entered the village')
@@ -241,6 +284,9 @@ def get_hero_dmg():
     elif 'trident' in game.equipped_weapon:
         calc_player_dmg += gconfig.trident_atk
         print('your attack is improved by your trident')
+    elif 'scarab blade' in game.equipped_weapon:
+        calc_player_dmg += 200
+        print('your attack is improved by your trident')
     return calc_player_dmg
 
 
@@ -296,7 +342,7 @@ def bossfight(previous_scene):
     else:
         print("A Goblin King appears, he towers over you")
         print('And he has', game.boss_hp, 'hp')
-        player_dmg = get_hero_dmg
+        player_dmg = get_hero_dmg()
         while game.boss_hp > 0 and game.health >= 0:
             bossdam = random.randint(20, 100)
             game.health = game.health - bossdam
@@ -344,7 +390,7 @@ TBC===Ocean===Beach===West==========Crossroads================East==============
           ''')
     decision = input(
         '''You find yourself at The Crossroad, which seems the center of the world.
-Do you want to move west, north, or move east? (type commands like w or west) \n''')
+Do you want to move west, south, north, or move east? (type commands like w or west) \n''')
 
     if decision == 'east' or decision == 'e':
         game.prev_location = crossroads
@@ -356,6 +402,9 @@ Do you want to move west, north, or move east? (type commands like w or west) \n
     elif decision == 'north' or decision == 'n':
         game.prev_location = crossroads
         northern_scene()
+    elif decision == 'south' or decision == 's':
+        game.prev_location = crossroads
+        southern_scene()
     elif decision == 'help':
         print('please, type west, east, or north\n')
         crossroads()
@@ -374,7 +423,7 @@ def randoms():
 
 
 if __name__ == "__main__":
-    game = Game(0, 1, 100)
+    game = Game(10000, 1, 100)
     game.prev_location = ""
     gconfig = Config()
     enemy = ['bat', 'undead soldier']
