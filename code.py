@@ -193,8 +193,8 @@ def enter_village_shop():
             print("you don't have enough money for that!")
             enter_village_shop()
     elif shop_choice == 'sword' or shop_choice == 'the sword' or shop_choice == 'the damassk steel sword':
-        if game.gold >= 1000:
-            game.gold = game.gold - 1000
+        if game.gold >= gconfig.damask_sword_price:
+            game.gold = game.gold - gconfig.damask_sword_price
             game.equipped_weapon.append("damassk sword")
             print("You bought your sword, swing it over your shoulder and headed to the exit")
             village_scene()
@@ -202,8 +202,8 @@ def enter_village_shop():
             print("you don't have enough money for that!")
             enter_village_shop()
     elif shop_choice == 'trident':
-        if game.gold >= 500:
-            game.gold = game.gold - 1000
+        if game.gold >= gconfig.trident_price:
+            game.gold = game.gold - gconfig.trident_price
             game.equipped_weapon.append("trident")
             print("You bought your trident, swung it over your shoulder and headed to the exit")
             village_scene()
