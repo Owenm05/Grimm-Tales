@@ -174,18 +174,18 @@ def village_scene():
 
 ##code for the shop
 def enter_village_shop():
-    global game
-    shop_choice = input('''you see healing drinks, 25g each,
-                       a trident for 500g and 
-                       the damassk steel sword for 1,000g. 
-                       You have {} gold.
-                       What would you like to buy? drinks, trident or the sword?
-                       Or you wanna leave?'''.format(game.gold))
+    global game, gconfig
+    shop_choice = input(f'''    You see healing drinks, {gconfig.hp_drink_price}g each,
+a trident for {gconfig.trident_price} and 
+the damassk steel sword for {gconfig.damask_sword_price}. 
+You have {game.gold} gold.
+What would you like to buy? drinks, trident or the sword?
+Or you wanna leave?''')
     if (shop_choice == 'drink' or shop_choice == 'drinks'
             or shop_choice == 'healing drink' or shop_choice == 'healing drinks'):
         amount = input('input how many drinks you would like to buy\n')
-        if game.gold >= int(amount) * 25:
-            game.gold = game.gold - int(amount) * 25
+        if game.gold >= int(amount) * gconfig.hp_drink_price:
+            game.gold = game.gold - int(amount) * gconfig.hp_drink_price
             game.hp_drinks += int(amount)
             print("You bought your drinks and headed to the exit")
             village_scene()
@@ -210,8 +210,6 @@ def enter_village_shop():
         else:
             print("you dont have enough money for that!")
             enter_village_shop()
-            
-            
     else:
         village_scene()
 
