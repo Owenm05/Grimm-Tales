@@ -21,7 +21,7 @@ class Game:
         self.prev_location = ""
         self.location = ""
         self.key_items = []
-        self.equipped_chest
+        self.equipped_chest = []
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
@@ -92,30 +92,35 @@ def northern_scene():
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
                 ##add mountain code
+
 def southern_scene():
     global game
     game.location = southern_scene
     print('A vast expanse of golden sand stretches out just to the south of of you. The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n')
     decision = input('choose either n, merchant, or s')
-        if decision == 'north' or decision == 'n':
-            print('You walk back to the crossroad')
+    if decision == 'north' or decision == 'n':
+        print('You walk back to the crossroad')
+        game.prev_location = southern_scene
+        crossroads()
+    if decision == 'merchant':
+        enter_desert_market()
+    elif decision == 'south' or decision == 's':
+        if 'desert chestplate' in game.equipped_chest:
+            print("Knowing you have the necessary gear to enter the desert, you walk to the Golden Dunes.\n ")
             game.prev_location = southern_scene
-            crossroads()
-        if decision == 'merchant':
-            enter_desert_market()
-        elif decision == 'south' or decision == 's':
-             if 'desert chestplate' in game.equipped_chest:
-                print("Knowing you have the necessary gear to enter the desert, you walk to the Golden Dunes.\n ")
-                game.prev_location = southern_scene
-                golden_dunes_scene()
-             elif 'desert chestplate' not in game.equipped_chest:
-                print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
-                southern_scene()
+            golden_dunes_scene()
+        elif 'desert chestplate' not in game.equipped_chest:
+            print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
+            southern_scene()
+
+
 def golden_dunes_scene():
     global game
-    game.location = golden_desert_scene
+    game.location = golden_dunes_scene
     ##fill in rest of code
-## code for the desert market
+    ## code for the desert market
+
+
 def enter_desert_market():
     global game
     shop_choice = input('''you see healing drinks, 50g each,
@@ -191,7 +196,7 @@ def enter_village_shop():
             enter_village_shop()
     elif shop_choice == 'trident':
         if game.gold >= 500:
-            game.golf = game.gold - 1000
+            game.gold = game.gold - 1000
             game.equiped_weapon.append("trident")
             print("You bought your trident, swung it over your shoulder and headed to the exit")
             village_scene()
@@ -340,16 +345,19 @@ Do you want to move west, north, or move east? (type commands like w or west) \n
         game.prev_location = crossroads
         eastern_scene()
         return
-    if decision == 'west' or decision == 'w':
+    elif decision == 'west' or decision == 'w':
         game.prev_location = crossroads
         western_scene()
-    if decision == 'north' or decision == 'n':
+    elif decision == 'north' or decision == 'n':
         game.prev_location = crossroads
         northern_scene()
-    if decision == 'help':
+    elif decision == 'help':
         print('please, type west, east, or north\n')
         crossroads()
-##end code for the crossroads scene
+    else:
+        print('sorry, no such option is available\n')
+        crossroads()
+    # #end code for the crossroads scene
 
 
 def randoms():
