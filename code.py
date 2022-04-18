@@ -27,6 +27,14 @@ class Game:
     def die(self):
         print("you just died")
 
+class Config:
+    def __init__(self):
+        self.hp_drink_price = 25
+        self.hp_drink_hpower = 50 
+        self.damask_sword_price = 1000
+        self.damask_sword_atk = 100
+        self.trident_price = 500
+        self.trident_atk = 50
 
 # #start code for game endings
 # #trying to remove most deadends
@@ -131,7 +139,7 @@ def enter_village_shop():
             enter_village_shop()
     elif shop_choice == 'trident':
         if game.gold >= 500:
-            game.golf = game.gold - 1000
+            game.golf = game.gold - 500
             game.equiped.append("trident")
             print("You bought your trident, swung it over your shoulder and headed to the exit")
             village_scene()
@@ -162,23 +170,28 @@ def villageinn():
 
 ##end code for village
 
+def get_hero_dmg():
+    global game, gconfig
+    calc_player_dmg = game.player_dmg + (2 ^ game.player_level)
+    if 'damassk sword' in game.equipped:
+        calc_player_dmg += gconfig.damask_sword_atk
+        print('your attack is improved by your damassk sword')
+    elif 'trident' in game.equipped:
+        calc_player_dmg += gconfig.trident_atk
+        print('your attack is improved by your trident')
+    return calc_player_dmg
+
 
 ##code for battles
 def attack_regular(previous_scene):
-    global game
+    global game, gconfig
     global enemy
     randoms()
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy, ' appears it has', game.enemy_hp, 'hp')
     decision = input('fight or flee?\n')
-    if decision == 'fight':
-        player_dmg = game.player_dmg + (2 ^ game.player_level)
-        if 'damassk sword' in game.equipped:
-            player_dmg += 100
-            print('your attack is improved by your damassk sword')
-        elif 'trident' in game.equipped:
-            player_dmg += 50
-            print('your attack is improved  by your trident')
+    if decision == 'fight' or decision =='1':
+        player_dmg = get_hero_dmg()    
         while game.enemy_hp > 0 and game.health >= 1:
             game.health = game.health - game.enemy_dmg
             print('The enemy did', game.enemy_dmg, 'damage,', 'you have', game.health, 'health')
@@ -206,26 +219,22 @@ def attack_regular(previous_scene):
             previous_scene()
     elif decision == 'flee':
         previous_scene()
+    else:
+        print('no such way!')
+        attack_regular()
 
 
 def bossfight(previous_scene):
-    global game
+    global game, gconfig
     global enemy
     randoms()
     decision = input("Are you sure you want to progress, there is a strong enemy ahead?\n")
-    
     if decision == 'turn back' or decision == 'back' or decision == 'no':
         previous_scene()
     else:
         print("A Goblin King appears, he towers over you")
         print('And he has', game.boss_hp, 'hp')
-        player_dmg = game.player_dmg + (2 ^ game.player_level)
-        if 'damassk sword' in game.equipped:
-            player_dmg += 100
-            print('your attack is improved by your damassk sword')
-        if 'trident' in game.equipped:
-            player_dmg += 50
-            print('your attack is improved by your trident')
+        player_dmg = get_hero_dmg
         while game.boss_hp > 0 and game.health >= 0:
             bossdam = random.randint(20, 100)
             game.health = game.health - bossdam
@@ -282,6 +291,9 @@ Do you want to move west, north, or move east? (type commands like w or west) \n
     if decision == 'north' or decision == 'n':
         game.prev_location = crossroads
         northern_scene()
+    if decision == 'help':
+        print('please, type west, east, or north\n')
+        crossroads()
 ##end code for the crossroads scene
 
 
@@ -296,6 +308,7 @@ def randoms():
 if __name__ == "__main__":
     game = Game(0, 1, 100)
     game.prev_location = ""
+    gconfig = Config()
     enemy = ['bat', 'undead soldier']
     enemy = (enemy[random.randint(0, 1)])
     # #starting intro to game
