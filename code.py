@@ -17,10 +17,11 @@ class Game:
         self.boss_hp = 500
         self.rank = "stranger"
         self.hp_drinks = 0
-        self.equipped = []
+        self.equipped_weapon = []
         self.prev_location = ""
         self.location = ""
         self.key_items = []
+        self.equipped_chest
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
@@ -91,6 +92,57 @@ def northern_scene():
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
                 ##add mountain code
+def southern_scene():
+    global game
+    game.location = southern_scene
+    print('A vast expanse of golden sand stretches out just to the south of of you. The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n')
+    decision = input('choose either n, merchant, or s')
+        if decision == 'north' or decision == 'n':
+            print('You walk back to the crossroad')
+            game.prev_location = southern_scene
+            crossroads()
+        if decision == 'merchant':
+            enter_desert_market()
+        elif decision == 'south' or decision == 's':
+             if 'desert chestplate' in game.equipped_chest:
+                print("Knowing you have the necessary gear to enter the desert, you walk to the Golden Dunes.\n ")
+                game.prev_location = southern_scene
+                golden_dunes_scene()
+             elif 'desert chestplate' not in game.equipped_chest:
+                print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
+                southern_scene()
+def golden_dunes_scene():
+    global game
+    game.location = golden_desert_scene
+    ##fill in rest of code
+## code for the desert market
+def enter_desert_market():
+    global game
+    shop_choice = input('''you see healing drinks, 50g each,
+                       and a desert chestplate for 200g. 
+                       You have {} gold.
+                       What would you like to buy? drinks, or the desert chestplate?
+                       Or you wanna leave?'''.format(game.gold))
+    if (shop_choice == 'drink' or shop_choice == 'drinks'
+            or shop_choice == 'healing drink' or shop_choice == 'healing drinks'):
+        amount = input('input how many drinks you would like to buy\n')
+        if game.gold >= int(amount) * 50:
+            game.gold = game.gold - int(amount) * 50
+            game.hp_drinks += int(amount)
+            print("You bought your drinks and headed to the exit")
+            southern_scene()
+        else:
+            print("you don't have enough money for that!")
+            enter_desert_market()
+    elif shop_choice == 'chestplate' or shop_choice == 'desert chestplate' or shop_choice == 'the desert chestplate':
+        if game.gold >= 200:
+            game.gold = game.gold - 200
+            game.equipped_chest.append("desert chestplate")
+            print("You bought your chestplate, equipped it and headed to the exit")
+            southern_scene()
+        else:
+            print("you don't have enough money for that!")
+            enter_desert_market()
 
 def village_scene():
     print('you entered the village')
@@ -131,7 +183,7 @@ def enter_village_shop():
     elif shop_choice == 'sword' or shop_choice == 'the sword' or shop_choice == 'the damassk steel sword':
         if game.gold >= 1000:
             game.gold = game.gold - 1000
-            game.equipped.append("damassk sword")
+            game.equipped_weapon.append("damassk sword")
             print("You bought your sword, swing it over your shoulder and headed to the exit")
             village_scene()
         else:
@@ -139,8 +191,8 @@ def enter_village_shop():
             enter_village_shop()
     elif shop_choice == 'trident':
         if game.gold >= 500:
-            game.golf = game.gold - 500
-            game.equiped.append("trident")
+            game.golf = game.gold - 1000
+            game.equiped_weapon.append("trident")
             print("You bought your trident, swung it over your shoulder and headed to the exit")
             village_scene()
         else:
@@ -267,15 +319,18 @@ def crossroads():
     game.location = "crossroads"
     # TBC - to be created by gods of the World
     print('''The World's Map on The Crossroads Sign:
-              The Severed Highlands
-                        ||
-                  Colossal Gate
-                        ||
-    Dark Cave           North         Forest   Village   Graveyard
-      ||                ||            \\\      ||      //
-TBC==West==========Crossroads================East============TBC
-      ||                ||                     ||
-      TBC               TBC                   TBC       
+    
+                              The Severed Highlands===Abyssal Depths
+                                         ||
+               Peaceful Forest      Colossal Gate
+                       ||                ||
+                    Dark Cave         North         Forest   Village   Graveyard
+                       ||                ||            \\\     ||      ///
+TBC===Ocean===Beach===West==========Crossroads================East==============TBC
+                                         ||                    || 
+                                        South             Broken Portal      
+                                         ||
+                  Desert Village===Golden Dunes===Serpent's Den
           ''')
     decision = input(
         '''You find yourself at The Crossroad, which seems the center of the world.
