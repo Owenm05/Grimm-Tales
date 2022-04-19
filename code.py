@@ -33,10 +33,13 @@ class Game:
         if diceD20 <= 18:
             print(diceD20)
             print("you just died")
-        elif diceD20 > 18:
+        else:
             print("looks like you could use some help, let me revive you")
-            game.health += game.max_health
-            (game.prev_location)()
+            self.health = game.max_health
+            if self.prev_location == "":
+                self.prev_location = crossroads
+            self.prev_location()
+
 
 class Config:
     def __init__(self):
@@ -122,7 +125,9 @@ def northern_scene():
         decision = input('choose either n, or s')
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
-                ##add mountain code
+            ##add mountain code
+
+
 ##code for desert path======================================================================================================
 def southern_scene():
     global game
@@ -234,6 +239,7 @@ def village_scene():
         print("You decide to leave the village and return to the crossroad")
         eastern_scene()
 
+
 def enter_village_guild():
     global game
     print("the current quests availible are ")
@@ -248,6 +254,8 @@ def enter_village_guild():
         print("you chose quest 2")
         game.quest = questlist[1]
         village_scene()
+
+
 ##code for the shop
 def enter_village_shop():
     global game, gconfig
@@ -324,8 +332,7 @@ def get_hero_dmg():
     return calc_player_dmg
 
 
-##code for battles================================================================================================================
-
+# #code for battles================================================================================================================
 def attack_regular(previous_scene):
     global game, gconfig
     global enemy_zone_1
@@ -441,6 +448,8 @@ Do you want to move west, south, north, or move east? (type commands like w or w
     elif decision == 'help':
         print('please, type west, east, or north\n')
         crossroads()
+    elif decision == 'debug':
+        game.die()
     else:
         print('sorry, no such option is available\n')
         crossroads()
