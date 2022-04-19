@@ -29,7 +29,14 @@ class Game:
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
     def die(self):
-        print("you just died")
+        diceD20 = random.randrange(1, 20)
+        if diceD20 <= 18:
+            print(diceD20)
+            print("you just died")
+        elif diceD20 > 18:
+            print("looks like you could use some help, let me revive you")
+            game.health += game.max_health
+            (game.prev.location)()
 
 class Config:
     def __init__(self):
@@ -41,7 +48,11 @@ class Config:
         self.trident_atk = 50
         self.scarab_blade_price = 5000
         self.scarab_blade_atk = 200
-
+class Story:
+    def __init__(self):
+        self.beach_story = "you decide to walk barefoot along the clean beach. The waves lap at your feet. you can see someone standing on a dock in the distance"
+        self.southern_story = 'A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n'
+        self.eastern_story = "'North of you you see a village, to the west of you is a crossroad , to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
 # #start code for game endings
 # #trying to remove most deadends
 def ending_cave_collapsed():
@@ -72,12 +83,17 @@ def western_scene():
         game.prev_location = western_scene
         beach_scene()
 
-
+def beach_scene():
+    print(gstory.beach_story)
+    decision=input('would you like to go back to the entrance of the dark cave or check out the dock?')
+    if decision == 'dock':
+        game.prev_location = beach_scene
+        
 # #gives the user the choices for the right path
 def eastern_scene():
     global game
     game.location = eastern_scene
-    print('North of you you see a village\nto the west of you is a crossroad \nto the northwest you see a forest, south of you you see a partal that appears to be broken,  and to the northeast you see a graveyard\n')
+    print(gstory.eastern_story)
     decision = input('choose either n, w, nw or ne\n')
     if decision == 'northeast' or decision == 'ne':
         print('You walk into the graveyard')
@@ -112,7 +128,7 @@ def northern_scene():
 def southern_scene():
     global game
     game.location = southern_scene
-    print('A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n')
+    print(gstory.southern_story)
     decision = input('choose either north, merchant, or south\n')
     if decision == 'north' or decision == 'n':
         print('You walk back to the crossroad')
@@ -133,9 +149,10 @@ def golden_dunes_scene():
     global game
     game.location = golden_dunes_scene
     ##fill in rest of code
+
+
+
     ## code for the desert market
-
-
 def enter_desert_market():
     global game, gconfig
     if game.player_level<50:
@@ -316,9 +333,7 @@ def attack_regular(previous_scene):
                     game.enemy_hp=0
                 print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
             elif game.health <= 0:
-                print("you die")
-                if game.player_level >= 2:
-                    break
+                die()
         if game.enemy_hp <= 0:
             game.gold += 50
             game.xp += game.enemy_level * 3
@@ -367,7 +382,7 @@ def bossfight(previous_scene):
             print("you have obtained the ancient key, maybe it opens something?")
             previous_scene()
         if game.health <= 0:
-            print("you died \n game over")
+            game.die()
 
 
 ##end code for battles
@@ -429,6 +444,7 @@ if __name__ == "__main__":
     game = Game(10000, 1, 100)
     game.prev_location = ""
     gconfig = Config()
+    gstory = Story()
     enemy = ['bat', 'undead soldier']
     enemy = (enemy[random.randint(0, 1)])
     # #starting intro to game
