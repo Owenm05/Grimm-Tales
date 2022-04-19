@@ -12,6 +12,10 @@ class Game:
         self.max_health = health
         self.player_level = 1
         self.enemy_level = 1
+        self.str = 5
+        self.dex = 5
+        self.con = 5
+        self.unspend_points = 0
         self.enemy_hp = 0
         self.player_dmg = 0
         self.enemy_dmg = 0
@@ -43,6 +47,7 @@ class Game:
 
 class Config:
     def __init__(self):
+        self.levels = {1: 50, 2: 150, 3: 300, 4: 500, 5: 750}
         self.hp_drink_price = 25
         self.hp_drink_hpower = 50 
         self.damask_sword_price = 1000
@@ -355,7 +360,7 @@ def attack_regular(previous_scene):
                     game.enemy_hp=0
                 print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
             elif game.health <= 0:
-                die()
+                game.die()
         if game.enemy_hp <= 0:
             game.gold += 50
             game.xp += game.enemy_level * 3
