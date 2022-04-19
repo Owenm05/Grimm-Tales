@@ -7,6 +7,7 @@ class Game:
     def __init__(self, gold, xp, health):
         self.gold = gold
         self.xp = xp
+        self.quest = ""
         self.health = health
         self.max_health = health
         self.player_level = 1
@@ -27,7 +28,6 @@ class Game:
         self.equipped_head = []
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
-
     def die(self):
         diceD20 = random.randrange(1, 20)
         if diceD20 <= 18:
@@ -36,7 +36,7 @@ class Game:
         elif diceD20 > 18:
             print("looks like you could use some help, let me revive you")
             game.health += game.max_health
-            (game.prev.location)()
+            (game.prev_location)()
 
 class Config:
     def __init__(self):
@@ -54,7 +54,6 @@ class Story:
         self.southern_story = 'A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n'
         self.eastern_story = "'North of you you see a village, to the west of you is a crossroad , to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
 # #start code for game endings
-# #trying to remove most deadends
 def ending_cave_collapsed():
     print('As you enter the cave the ceiling collapses behind you')
     print('You decide to leave the cave and emerge through a grove of trees into a forest')
@@ -124,7 +123,7 @@ def northern_scene():
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
                 ##add mountain code
-
+##code for desert path======================================================================================================
 def southern_scene():
     global game
     game.location = southern_scene
@@ -217,11 +216,11 @@ def enter_desert_market():
                 print("you don't have enough money for that!")
                 enter_desert_market()
             
-
+##start code for village======================================================================================================
 def village_scene():
     print('you entered the village')
     village = input('''as you enter the village a few establishments stands out to you.
-    There are inn, where you could be healed, and a shop, and road to exit of the village. 
+    There are inn, where you could be healed, a guild where you could accept quests, and a shop, and road to exit of the village. 
     What do you like to visit?\n''')
     if village == 'inn' or village == 'i' and game.gold >= 100:
         villageinn()
@@ -229,11 +228,26 @@ def village_scene():
         print("You can not afford to heal you are {} gold short".format(100 - game.gold))
     elif village == 'shop':
         enter_village_shop()
+    elif village == 'guild':
+        enter_village_guild()
     if village == 'no' or village == 'n' or village == 'exit' or village == 'leave' or village == 'road':
         print("You decide to leave the village and return to the crossroad")
         eastern_scene()
 
-
+def enter_village_guild():
+    global game
+    print("the current quests availible are ")
+    for x in questlist:
+        print(x)
+    decision = input("you have one avilible quest slot which quest would you like to take 1 or 2?\n")
+    if decision == '1':
+        print("you chose quest 1")
+        game.quest = questlist[0]
+        village_scene()
+    elif decision == '2':
+        print("you chose quest 2")
+        game.quest = questlist[1]
+        village_scene()
 ##code for the shop
 def enter_village_shop():
     global game, gconfig
@@ -292,7 +306,7 @@ def villageinn():
         print('you have have gone too far there is no turning back')
 
 
-##end code for village
+##end code for village ============================================================================================================
 
 def get_hero_dmg():
     global game, gconfig
@@ -310,13 +324,14 @@ def get_hero_dmg():
     return calc_player_dmg
 
 
-##code for battles
+##code for battles================================================================================================================
+
 def attack_regular(previous_scene):
     global game, gconfig
-    global enemy
+    global enemy_zone_1
     randoms()
     game.enemy_hp = game.enemy_level * 50
-    print('A level', game.enemy_level, enemy, ' appears it has', game.enemy_hp, 'hp')
+    print('A level', game.enemy_level, enemy_zone_1, ' appears it has', game.enemy_hp, 'hp')
     decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         player_dmg = get_hero_dmg()    
@@ -385,7 +400,7 @@ def bossfight(previous_scene):
             game.die()
 
 
-##end code for battles
+##end code for battles======================================================================================================
 
 ##code for the inital choice
 def crossroads():
@@ -445,8 +460,9 @@ if __name__ == "__main__":
     game.prev_location = ""
     gconfig = Config()
     gstory = Story()
-    enemy = ['bat', 'undead soldier']
-    enemy = (enemy[random.randint(0, 1)])
+    enemy_zone_1 = ['bat', 'undead soldier']
+    enemy_zone_1 = (enemy_zone_1[random.randint(0, 1)])
+    questlist = ['1. slay 10 bats\n', '2. slay 10 undead soldiers']
     # #starting intro to game
     print(" Hello there! Welcome to the world of Grimm!")
     print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
