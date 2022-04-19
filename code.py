@@ -39,6 +39,8 @@ class Config:
         self.damask_sword_atk = 100
         self.trident_price = 500
         self.trident_atk = 50
+        self.scarab_blade_price = 5000
+        self.scarab_blade_atk = 200
 
 # #start code for game endings
 # #trying to remove most deadends
@@ -135,7 +137,7 @@ def golden_dunes_scene():
 
 
 def enter_desert_market():
-    global game
+    global game, gconfig
     if game.player_level<50:
         shop_choice = input('''you see healing drinks, 50g each,
                            and a desert chestplate for 200g. 
@@ -189,8 +191,8 @@ def enter_desert_market():
                 print("you don't have enough money for that!")
                 enter_desert_market()
         elif shop_choice == 'blade' or shop_choice == 'scarab blade' or shop_choice == 'a scarab blade':
-            if game.gold >= 5000:
-                game.gold = game.gold - 5000
+            if game.gold >= gconfig.scarab_blade_price:
+                game.gold = game.gold - gconfig.scarab_blade_price
                 game.equipped_weapon.append("scarab blade")
                 print("You bought a Scarab Blade, equipped it and headed to the exit")
                 southern_scene()
@@ -278,14 +280,15 @@ def villageinn():
 def get_hero_dmg():
     global game, gconfig
     calc_player_dmg = game.player_dmg + (2 ^ game.player_level)
-    if 'damassk sword' in game.equipped_weapon:
+    # please note, you should take in DECREMENTAL ORDER BY ATK POWER
+    if 'scarab blade' in game.equipped_weapon:
+        calc_player_dmg += gconfig.scarab_blade_atk
+        print('your attack is improved by your scarab blade')
+    elif 'damassk sword' in game.equipped_weapon:
         calc_player_dmg += gconfig.damask_sword_atk
         print('your attack is improved by your damassk sword')
     elif 'trident' in game.equipped_weapon:
         calc_player_dmg += gconfig.trident_atk
-        print('your attack is improved by your trident')
-    elif 'scarab blade' in game.equipped_weapon:
-        calc_player_dmg += 200
         print('your attack is improved by your trident')
     return calc_player_dmg
 
