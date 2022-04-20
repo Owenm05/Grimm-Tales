@@ -1,6 +1,5 @@
 # #imports are always on top
 import random
-import math
 
 
 class Game:
@@ -12,6 +11,10 @@ class Game:
         self.max_health = health
         self.player_level = 1
         self.enemy_level = 1
+        self.str = 5
+        self.dex = 5
+        self.con = 5
+        self.unspent_points = 0
         self.enemy_hp = 0
         self.player_dmg = 0
         self.enemy_dmg = 0
@@ -26,20 +29,29 @@ class Game:
         self.equipped_legs = []
         self.equipped_feet = []
         self.equipped_head = []
+
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
+
     def die(self):
-        diceD20 = random.randrange(1, 20)
-        if diceD20 <= 18:
-            print(diceD20)
+        dice_d20 = random.randrange(1, 20)
+        if dice_d20 <= 18:
+            print(dice_d20)
             print("you just died")
-        elif diceD20 > 18:
+        else:
             print("looks like you could use some help, let me revive you")
-            game.health += game.max_health
-            (game.prev_location)()
+            self.health = game.max_health
+            if self.prev_location == "":
+                self.prev_location = crossroads
+            self.prev_location()
+
 
 class Config:
     def __init__(self):
+        self.levels = {1: 0, 2: 50, 3: 150, 4: 300, 5: 500, 6: 750, 7: 1050, 8: 1400, 9: 1800, 10: 2300, 11: 2900, 12: 3600}
+        self.hero_chance_to_hit = 0.7
+        self.dex_accuracy_bonus = 0.01
+        self.default_hero_health = 100
         self.hp_drink_price = 25
         self.hp_drink_hpower = 50 
         self.damask_sword_price = 1000
@@ -68,8 +80,8 @@ def western_scene():
     decision = input('You see a dark cave ahead of you to the north\n And a Sandy Beach to the west of you \nDo you move north, move west, or turn back?\n')
     if decision == 'north' or decision == 'n':
         print('You move into the dark cave\n')
-        diceD20 = random.randrange(1, 20)
-        if diceD20 <= 18:
+        dice_d20 = random.randrange(1, 20)
+        if dice_d20 <= 18:
             attack_regular(western_scene)
         else:
             ending_cave_collapsed()
@@ -122,7 +134,9 @@ def northern_scene():
         decision = input('choose either n, or s')
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
-                ##add mountain code
+            ##add mountain code
+
+
 ##code for desert path======================================================================================================
 def southern_scene():
     global game
@@ -144,6 +158,7 @@ def southern_scene():
             print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
             southern_scene()
 
+
 def golden_dunes_scene():
     global game
     game.location = golden_dunes_scene
@@ -151,7 +166,7 @@ def golden_dunes_scene():
 
 
 
-    ## code for the desert market
+# # code for the desert market
 def enter_desert_market():
     global game, gconfig
     if game.player_level<50:
@@ -215,12 +230,19 @@ def enter_desert_market():
             else:
                 print("you don't have enough money for that!")
                 enter_desert_market()
-            
-##start code for village======================================================================================================
+
+
+# -=start code for village=-
 def village_scene():
+    global game
+    game.location = village_scene
     print('you entered the village')
     village = input('''as you enter the village a few establishments stands out to you.
-    There are inn, where you could be healed, a guild where you could accept quests, and a shop, and road to exit of the village. 
+    There are inn, where you could be healed,
+    a guild where you could accept quests,
+    a shop, where ammunitions could be bought,
+    a hero screen, where stat points could be spent, 
+    and road to exit of the village. 
     What do you like to visit?\n''')
     if village == 'inn' or village == 'i' and game.gold >= 100:
         villageinn()
@@ -230,9 +252,52 @@ def village_scene():
         enter_village_shop()
     elif village == 'guild':
         enter_village_guild()
+    elif village == 'hero':
+        game.prev_location = village_scene
+        enter_hero_screen()
     if village == 'no' or village == 'n' or village == 'exit' or village == 'leave' or village == 'road':
         print("You decide to leave the village and return to the crossroad")
         eastern_scene()
+
+
+def enter_hero_screen():
+    global game
+    game.location = enter_hero_screen
+    print(f'''
+HP  | {game.health} / {game.max_health}
+STR | {game.str}
+DEX | {game.dex}
+CON | {game.con}
+You have {game.unspent_points} to improve stats.
+    ''')
+    if game.unspent_points>0:
+        decision = input('Which one you want to improve? str, dex, con? or leave to leave\n')
+    else:
+        decision = input('Nothing to do. leave?')
+    if decision == 'str' and game.unspent_points > 0:
+        game.str += 1
+        game.unspent_points -= 1
+        if game.unspent_points > 0:
+            enter_hero_screen()
+        game.prev_location()
+    elif decision == 'dex' and game.unspent_points > 0:
+        game.dex += 1
+        game.unspent_points -= 1
+        if game.unspent_points > 0:
+            enter_hero_screen()
+        game.prev_location()
+    elif decision == 'con' and game.unspent_points > 0:
+        game.con += 1
+        game.unspent_points -= 1
+        game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.con * 10
+        if game.unspent_points > 0:
+            enter_hero_screen()
+        game.prev_location()
+    elif decision == "leave":
+        game.prev_location()
+    else:
+        game.prev_location()
+
 
 def enter_village_guild():
     global game
@@ -248,6 +313,8 @@ def enter_village_guild():
         print("you chose quest 2")
         game.quest = questlist[1]
         village_scene()
+
+
 ##code for the shop
 def enter_village_shop():
     global game, gconfig
@@ -296,21 +363,21 @@ def villageinn():
     print('you enter the inn\n')
     choiceinn = input('for 100 gold you can rest to full hp. Would you like to do so?\n')
     if choiceinn == 'yes' or choiceinn == 'y':
+        print(game.max_health)
         healamount  = game.max_health - game.health
         game.health = game.max_health
         game.gold  -= 100
-        print("you heal for {}".format(healamount))
+        print("you have restored {} hp in the inn".format(healamount))
         print("Now healed you leave the village and return to the crossroads")
         village_scene()
     elif choiceinn == 'no' or choiceinn == 'n':
         print('you have have gone too far there is no turning back')
-
-
 ##end code for village ============================================================================================================
+
 
 def get_hero_dmg():
     global game, gconfig
-    calc_player_dmg = game.player_dmg + (2 ^ game.player_level)
+    calc_player_dmg = game.player_dmg + (2 ^ game.player_level) + game.str * 5
     # please note, you should take in DECREMENTAL ORDER BY ATK POWER
     if 'scarab blade' in game.equipped_weapon:
         calc_player_dmg += gconfig.scarab_blade_atk
@@ -321,11 +388,37 @@ def get_hero_dmg():
     elif 'trident' in game.equipped_weapon:
         calc_player_dmg += gconfig.trident_atk
         print('your attack is improved by your trident')
+    chance_to_hit = gconfig.hero_chance_to_hit + game.dex * gconfig.dex_accuracy_bonus
+    print("chance_to_hit ",  chance_to_hit)
+    # -=multiply by 100 for easy math=-
+    chance_to_hit = chance_to_hit * 100
+    roll_5d20 = random.randint(5, 100)
+    print("roll_5d20 ", roll_5d20)
+    if roll_5d20 > chance_to_hit:
+        # -= missed! =-
+        calc_player_dmg = 0
     return calc_player_dmg
 
 
-##code for battles================================================================================================================
+def check_new_level():
+    global game, gconfig
+    bool_level_changed = False
+    while game.xp > gconfig.levels[game.player_level+1]:
+        bool_level_changed = True
+        game.player_level += 1
+        game.unspent_points += 1
+        stat_increase = random.randint(1, 3)
+        if stat_increase == 1:
+            game.str += 1
+        elif stat_increase == 2:
+            game.dex += 1
+        elif stat_increase == 3:
+            game.con += 1
+    if bool_level_changed:
+        game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.con * 10
 
+
+# -=code for battles=-
 def attack_regular(previous_scene):
     global game, gconfig
     global enemy_zone_1
@@ -334,7 +427,6 @@ def attack_regular(previous_scene):
     print('A level', game.enemy_level, enemy_zone_1, ' appears it has', game.enemy_hp, 'hp')
     decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
-        player_dmg = get_hero_dmg()    
         while game.enemy_hp > 0 and game.health >= 1:
             game.health = game.health - game.enemy_dmg
             print('The enemy did', game.enemy_dmg, 'damage,', 'you have', game.health, 'health')
@@ -343,19 +435,20 @@ def attack_regular(previous_scene):
                     game.hp_drinks -= 1
                     game.health    += 50
                     print("you drink a hp drink vital and restored 50 health by this")
+                player_dmg = get_hero_dmg()
                 game.enemy_hp = game.enemy_hp - player_dmg
-                if game.enemy_hp <= 0:
-                    game.enemy_hp=0
-                print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
+                if player_dmg == 0:
+                    print('You missed!\n')
+                else:
+                    if game.enemy_hp <= 0:
+                        game.enemy_hp=0
+                    print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
             elif game.health <= 0:
-                die()
+                game.die()
         if game.enemy_hp <= 0:
             game.gold += 50
             game.xp += game.enemy_level * 3
-            game.player_level = math.floor(game.xp / 10)
-            if game.player_level > 1:
-                game.max_health = 100 + game.player_level * 5
-            ##print("you leveled up, you level is now",playerlevel)
+            check_new_level()
             print(game)
             previous_scene()
     elif decision == 'flee':
@@ -375,7 +468,6 @@ def bossfight(previous_scene):
     else:
         print("A Goblin King appears, he towers over you")
         print('And he has', game.boss_hp, 'hp')
-        player_dmg = get_hero_dmg()
         while game.boss_hp > 0 and game.health >= 0:
             bossdam = random.randint(20, 100)
             game.health = game.health - bossdam
@@ -384,14 +476,18 @@ def bossfight(previous_scene):
                 game.hp_drinks -= 1
                 game.health += 50
                 print("you drink a hp drink vital and restored 50 health by this")
+            player_dmg = get_hero_dmg()
             game.boss_hp = game.boss_hp - player_dmg
-            print('You did', player_dmg, 'damage,', 'the enemy has', game.boss_hp, 'hp\n')
+            if player_dmg == 0:
+                print('You missed!\n')
+            else:
+                if game.enemy_hp <= 0:
+                    game.enemy_hp = 0
+                print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
         if game.boss_hp <= 0 and game.health > 0:
             game.gold += 1000
-            game.xp   += 100
-            game.player_level = math.floor(game.xp / 10)
-            if game.player_level > 1:
-                game.max_health = 100 + game.player_level * 5
+            game.xp   += 500
+            check_new_level()
             print(game)
             game.key_items.append('ancient key')
             print("you have obtained the ancient key, maybe it opens something?")
@@ -441,6 +537,8 @@ Do you want to move west, south, north, or move east? (type commands like w or w
     elif decision == 'help':
         print('please, type west, east, or north\n')
         crossroads()
+    elif decision == 'debug':
+        game.die()
     else:
         print('sorry, no such option is available\n')
         crossroads()
@@ -449,16 +547,16 @@ Do you want to move west, south, north, or move east? (type commands like w or w
 
 def randoms():
     global game
-    ## code for randomized variable
+    # -=code for randomized variable=-
     game.enemy_level = random.randint(1, 5)
     game.enemy_dmg = random.randint(5, 10)
     game.player_dmg = random.randint(50, 100)
 
 
 if __name__ == "__main__":
-    game = Game(10000, 1, 100)
-    game.prev_location = ""
     gconfig = Config()
+    game = Game(10000, 1, gconfig.default_hero_health)
+    game.prev_location = ""
     gstory = Story()
     enemy_zone_1 = ['bat', 'undead soldier']
     enemy_zone_1 = (enemy_zone_1[random.randint(0, 1)])
