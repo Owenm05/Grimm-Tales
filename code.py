@@ -162,10 +162,37 @@ def southern_scene():
 def golden_dunes_scene():
     global game
     game.location = golden_dunes_scene
-    ##fill in rest of code
+    print('''you can move either west to the desert village, north back to the southern pass, or east to the Serpent's Den''')
+    decision=input('choose either west, north, east')
+    if decision == 'west' or decision == 'w':
+          game.prev_location = golden_dunes_scene
+          desert_village_scene()
 
-
-
+def desert_village_scene():
+    global game
+    game.location = desert_village_scene
+    print('you entered the desert village')
+    village = input('''as you enter the village a few establishments stands out to you.
+    There are inn, where you could be healed,
+    a guild where you could accept quests,
+    a shop, where ammunitions could be bought,
+    a hero screen, where stat points could be spent, 
+    and road to exit of the village. 
+    What do you like to visit?\n''')
+    if village == 'inn' or village == 'i' and game.gold >= 100:
+        villageinn()
+    elif village == 'inn' and game.gold < 100:
+        print("You can not afford to heal you are {} gold short".format(100 - game.gold))
+    elif village == 'shop':
+        enter_village_shop()
+    elif village == 'guild':
+        enter_village_guild()
+    elif village == 'hero':
+        game.prev_location = desert_village_scene
+        enter_hero_screen()
+    if village == 'no' or village == 'n' or village == 'exit' or village == 'leave' or village == 'road':
+        print("You decide to leave the desert village and return to the golden dunes")
+        golde_dunes_scene()
 # # code for the desert market
 def enter_desert_market():
     global game, gconfig
@@ -271,7 +298,7 @@ con | {game.con}
 You have {game.unspent_points} to improve stats.
     ''')
     if game.unspent_points>0:
-        decision = input('Which one you want to improve you have {game.unspent_points}? str, dex, con? or leave to leave\n')
+        decision = input('Which one you want to improve you have? str, dex, con? or leave to leave\n')
     else:
         decision = input('Nothing to do. leave?\n')
     if decision == 'str' and game.unspent_points > 0:
