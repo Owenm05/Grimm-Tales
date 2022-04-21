@@ -48,7 +48,7 @@ class Game:
 
 class Config:
     def __init__(self):
-        self.levels = {1: 0, 2: 50, 3: 150, 4: 300, 5: 500, 6: 750, 7: 1050, 8: 1400, 9: 1800, 10: 2300, 11: 2900, 12: 3600}
+        self.levels = {1: 0, 2: 25, 3: 75, 4: 150, 5: 250, 6: 375, 7: 525, 8: 700, 9: 900, 10: 1150, 11: 1450, 12: 1800}
         self.hero_chance_to_hit = 0.7
         self.dex_accuracy_bonus = 0.01
         self.default_hero_health = 100
@@ -62,9 +62,9 @@ class Config:
         self.scarab_blade_atk = 200
 class Story:
     def __init__(self):
-        self.beach_story = "you decide to walk barefoot along the clean beach. The waves lap at your feet. you can see someone standing on a dock in the distance"
+        self.beach_story = "You decide to walk barefoot along the clean beach. The waves lap at your feet. you can see someone standing on a dock in the distance"
         self.southern_story = 'A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n'
-        self.eastern_story = "'North of you you see a village, to the west of you is a crossroad , to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
+        self.eastern_story = "'North of you you see a village, to the west of you is a crossroad, to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
 # #start code for game endings
 def ending_cave_collapsed():
     print('As you enter the cave the ceiling collapses behind you')
@@ -273,7 +273,7 @@ You have {game.unspent_points} to improve stats.
     if game.unspent_points>0:
         decision = input('Which one you want to improve you have {game.unspent_points}? str, dex, con? or leave to leave\n')
     else:
-        decision = input('Nothing to do. leave?')
+        decision = input('Nothing to do. leave?\n')
     if decision == 'str' and game.unspent_points > 0:
         game.str += 1
         game.unspent_points -= 1
@@ -392,7 +392,7 @@ def get_hero_dmg():
     print("Your chance to hit is",  (chance_to_hit*100),"%")
     # -=multiply by 100 for easy math=-
     chance_to_hit = chance_to_hit * 100
-    roll_5d20 = random.randint(5, 100)
+    roll_5d20 = random.randint(1, 100)
     if roll_5d20 < chance_to_hit:
         print("You rolled a  ", roll_5d20, "you hit")
     if roll_5d20 > chance_to_hit:
@@ -455,6 +455,7 @@ def attack_regular(previous_scene):
     elif decision == 'flee':
         previous_scene()
     else:
+        ##bugged
         print('no such way!')
         attack_regular(previous_scene)
 
