@@ -264,14 +264,14 @@ def enter_hero_screen():
     global game
     game.location = enter_hero_screen
     print(f'''
-HP  | {game.health} / {game.max_health}
-STR | {game.str}
-DEX | {game.dex}
-CON | {game.con}
+hp  | {game.health} / {game.max_health}
+str | {game.str}
+dex | {game.dex}
+con | {game.con}
 You have {game.unspent_points} to improve stats.
     ''')
     if game.unspent_points>0:
-        decision = input('Which one you want to improve? str, dex, con? or leave to leave\n')
+        decision = input('Which one you want to improve you have {game.unspent_points}? str, dex, con? or leave to leave\n')
     else:
         decision = input('Nothing to do. leave?')
     if decision == 'str' and game.unspent_points > 0:
@@ -389,11 +389,12 @@ def get_hero_dmg():
         calc_player_dmg += gconfig.trident_atk
         print('your attack is improved by your trident')
     chance_to_hit = gconfig.hero_chance_to_hit + game.dex * gconfig.dex_accuracy_bonus
-    print("chance_to_hit ",  chance_to_hit)
+    print("Your chance to hit is",  (chance_to_hit*100),"%")
     # -=multiply by 100 for easy math=-
     chance_to_hit = chance_to_hit * 100
     roll_5d20 = random.randint(5, 100)
-    print("roll_5d20 ", roll_5d20)
+    if roll_5d20 < chance_to_hit:
+        print("You rolled a  ", roll_5d20, "you hit")
     if roll_5d20 > chance_to_hit:
         # -= missed! =-
         calc_player_dmg = 0
@@ -566,4 +567,3 @@ if __name__ == "__main__":
     print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
     print("\nThis world is a vast place, called Grimm inhabited by many creatures\n")
     crossroads()
-
