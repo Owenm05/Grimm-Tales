@@ -82,7 +82,7 @@ def western_scene():
         print('You move into the dark cave\n')
         dice_d20 = random.randrange(1, 20)
         if dice_d20 <= 18:
-            attack_regular(western_scene)
+            attack_regular(western_scene, 'dark cave')
         else:
             ending_cave_collapsed()
     elif decision == 'south' or decision == 'back' or decision == 'turn back':
@@ -108,7 +108,7 @@ def eastern_scene():
     decision = input('choose either n, w, nw or ne\n')
     if decision == 'northeast' or decision == 'ne':
         print('You walk into the graveyard')
-        attack_regular(eastern_scene)
+        attack_regular(eastern_scene, 'graveyard')
     elif decision == 'nw':
         bossfight(eastern_scene)
     elif decision == 'n':
@@ -192,7 +192,9 @@ def desert_village_scene():
         enter_hero_screen()
     if village == 'no' or village == 'n' or village == 'exit' or village == 'leave' or village == 'road':
         print("You decide to leave the desert village and return to the golden dunes")
-        golde_dunes_scene()
+        golden_dunes_scene()
+
+
 # # code for the desert market
 def enter_desert_market():
     global game, gconfig
@@ -331,7 +333,7 @@ def enter_village_guild():
     print("the current quests availible are ")
     for x in questlist:
         print(x)
-    decision = input("you have one avilible quest slot which quest would you like to take 1 or 2?\n")
+    decision = input("you have one availible quest slot which quest would you like to take 1 or 2?\n")
     if decision == '1':
         print("you chose quest 1")
         game.quest = questlist[0]
@@ -447,12 +449,20 @@ def check_new_level():
 
 
 # -=code for battles=-
-def attack_regular(previous_scene):
+def attack_regular(previous_scene, location=None):
     global game, gconfig
-    global enemy_zone_1
+    if location == "graveyard":
+        enemy_list = ['zombie', 'undead soldier', 'undead archer']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "dark cave":
+        enemy_list = ['bat', 'spider', 'undead archer']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
+    else:
+        enemy_list = ['bat', 'zombie', 'wolf', 'undead']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
     randoms()
     game.enemy_hp = game.enemy_level * 50
-    print('A level', game.enemy_level, enemy_zone_1, ' appears it has', game.enemy_hp, 'hp')
+    print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
     decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
@@ -484,7 +494,7 @@ def attack_regular(previous_scene):
     else:
         ##bugged
         print('no such way!')
-        attack_regular(previous_scene)
+        attack_regular(previous_scene, location)
 
 
 def bossfight(previous_scene):
@@ -587,8 +597,6 @@ if __name__ == "__main__":
     game = Game(10000, 1, gconfig.default_hero_health)
     game.prev_location = ""
     gstory = Story()
-    enemy_zone_1 = ['bat', 'undead soldier']
-    enemy_zone_1 = (enemy_zone_1[random.randint(0, 1)])
     questlist = ['1. slay 10 bats\n', '2. slay 10 undead soldiers']
     # #starting intro to game
     print(" Hello there! Welcome to the world of Grimm!")
