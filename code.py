@@ -4,6 +4,7 @@ import random
 
 class Game:
     def __init__(self, gold, xp, health):
+        global gconfig
         self.gold = gold
         self.xp = xp
         self.quest = ""
@@ -11,9 +12,9 @@ class Game:
         self.max_health = health
         self.player_level = 1
         self.enemy_level = 1
-        self.str = 5
-        self.dex = 5
-        self.con = 5
+        self.str = random.randrange(1, 7)
+        self.con = random.randrange(1, 7)
+        self.dex = gconfig.points - self.str - self.con
         self.unspent_points = 0
         self.enemy_hp = 0
         self.player_dmg = 0
@@ -49,6 +50,9 @@ class Game:
 class Config:
     def __init__(self):
         self.levels = {1: 0, 2: 25, 3: 75, 4: 150, 5: 250, 6: 375, 7: 525, 8: 700, 9: 900, 10: 1150, 11: 1450, 12: 1800}
+        self.points = 15
+        self.hero_chance_to_evade = 0.1
+        self.dex_evade_bonus = 0.01
         self.hero_chance_to_hit = 0.7
         self.dex_accuracy_bonus = 0.01
         self.default_hero_health = 100
@@ -60,12 +64,16 @@ class Config:
         self.trident_atk = 50
         self.scarab_blade_price = 5000
         self.scarab_blade_atk = 200
+
+
 class Story:
     def __init__(self):
         self.beach_story = "You decide to walk barefoot along the clean beach. The waves lap at your feet. you can see someone standing on a dock in the distance"
         self.southern_story = 'A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n'
         self.eastern_story = "'North of you you see a village, to the west of you is a crossroad, to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
-# #start code for game endings
+
+
+# -=start code for game endings=-
 def ending_cave_collapsed():
     print('As you enter the cave the ceiling collapses behind you')
     print('You decide to leave the cave and emerge through a grove of trees into a forest')
@@ -94,13 +102,15 @@ def western_scene():
         game.prev_location = western_scene
         beach_scene()
 
+
 def beach_scene():
     print(gstory.beach_story)
-    decision=input('would you like to go back to the entrance of the dark cave or check out the dock?')
+    decision = input('would you like to go back to the entrance of the dark cave or check out the dock?')
     if decision == 'dock':
         game.prev_location = beach_scene
-        
-# #gives the user the choices for the right path
+
+
+# -=gives the user the choices for the right path=-
 def eastern_scene():
     global game
     game.location = eastern_scene
@@ -128,16 +138,20 @@ def eastern_scene():
 def northern_scene():
     global game
     game.location = northern_scene
-    print('Two colossal stone statues stand on the sides of a gigantic stone gate.\nUpon closer inspection of the gate you find a keyhole at the base of one of the doors.')
+    print('''Two colossal stone statues stand on the sides of a gigantic stone gate.\n
+Upon closer inspection of the gate you find a keyhole at the base of one of the doors.''')
     if 'ancient key' in game.key_items:
-        print(" you unlock the gate with the ancient key. \n The sound of a powerful mechcanism at work can be heard as the gate slowly opens.\nIn the distance you see a mountain range commonly called The Severed Highlands.\n Would you like to go to The Severed Highlands, or turn back?")
+        print('''you unlock the gate with the ancient key.\n 
+The sound of a powerful mechanism at work can be heard as the gate slowly opens.\n
+In the distance you see a mountain range commonly called The Severed Highlands.\n
+Would you like to go to The Severed Highlands, or turn back?''')
         decision = input('choose either n, or s')
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
-            ##add mountain code
+            # #add mountain code
 
 
-##code for desert path======================================================================================================
+# -=code for desert path=-
 def southern_scene():
     global game
     game.location = southern_scene
@@ -165,8 +179,9 @@ def golden_dunes_scene():
     print('''you can move either west to the desert village, north back to the southern pass, or east to the Serpent's Den''')
     decision=input('choose either west, north, east')
     if decision == 'west' or decision == 'w':
-          game.prev_location = golden_dunes_scene
-          desert_village_scene()
+        game.prev_location = golden_dunes_scene
+        desert_village_scene()
+
 
 def desert_village_scene():
     global game
@@ -418,7 +433,7 @@ def get_hero_dmg():
         calc_player_dmg += gconfig.trident_atk
         print('your attack is improved by your trident')
     chance_to_hit = gconfig.hero_chance_to_hit + game.dex * gconfig.dex_accuracy_bonus
-    print("Your chance to hit is",  (chance_to_hit*100),"%")
+    print("Your chance to hit is",  (chance_to_hit*100), "%")
     # -=multiply by 100 for easy math=-
     chance_to_hit = chance_to_hit * 100
     roll_5d20 = random.randint(1, 100)
@@ -448,6 +463,18 @@ def check_new_level():
         game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.con * 10
 
 
+def calc_enemy_dmg(enemy_base_dmg):
+    global game
+    chance_to_evade = gconfig.hero_chance_to_evade + game.dex * gconfig.dex_evade_bonus
+    print("Your chance to evade is ", (chance_to_evade * 100), "%")
+    chance_to_evade = chance_to_evade * 100
+    roll_5d20 = random.randint(1, 100)
+    if roll_5d20 <= chance_to_evade:
+        print("You rolled a  ", roll_5d20, " , and thus enemy missed")
+        enemy_base_dmg = 0
+    return enemy_base_dmg
+
+
 # -=code for battles=-
 def attack_regular(previous_scene, location=None):
     global game, gconfig
@@ -466,8 +493,9 @@ def attack_regular(previous_scene, location=None):
     decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
-            game.health = game.health - game.enemy_dmg
-            print('The enemy did', game.enemy_dmg, 'damage,', 'you have', game.health, 'health')
+            enemy_dmg = calc_enemy_dmg(game.enemy_dmg)
+            game.health = game.health - enemy_dmg
+            print('The enemy did', enemy_dmg, 'damage,', 'you have', game.health, 'health')
             if game.health >= 1:
                 if game.health < 25 and game.hp_drinks > 0:
                     game.hp_drinks -= 1
@@ -509,6 +537,7 @@ def bossfight(previous_scene):
         print('And he has', game.boss_hp, 'hp')
         while game.boss_hp > 0 and game.health >= 0:
             bossdam = random.randint(20, 100)
+            bossdam = calc_enemy_dmg(bossdam)
             game.health = game.health - bossdam
             print('The enemy did', bossdam, 'damage,', 'you have', game.health, 'health')
             if game.health < 25 and game.hp_drinks > 0:
@@ -535,9 +564,7 @@ def bossfight(previous_scene):
             game.die()
 
 
-##end code for battles======================================================================================================
-
-##code for the inital choice
+# -=code for the inital choice=-
 def crossroads():
     global game
     game.location = "crossroads"
@@ -548,8 +575,8 @@ def crossroads():
                                          ||
                Peaceful Forest      Colossal Gate
                        ||                ||
-                    Dark Cave         North         Forest   Village   Graveyard
-                       ||                ||            \\\     ||      ///
+                    Dark Cave           North       Forest   Village   Graveyard
+                       ||                ||            \\\     ||      //
 TBC===Ocean===Beach===West==========Crossroads================East==============TBC
                                          ||                    || 
                                         South             Broken Portal      
@@ -577,7 +604,8 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         print('please, type west, east, or north\n')
         crossroads()
     elif decision == 'debug':
-        game.die()
+        gconfig.hero_chance_to_evade = 0.7
+        crossroads()
     else:
         print('sorry, no such option is available\n')
         crossroads()
@@ -594,10 +622,10 @@ def randoms():
 
 if __name__ == "__main__":
     gconfig = Config()
-    game = Game(10000, 1, gconfig.default_hero_health)
+    game = Game(0, 1, gconfig.default_hero_health)
     game.prev_location = ""
     gstory = Story()
-    questlist = ['1. slay 10 bats\n', '2. slay 10 undead soldiers']
+    questlist = ['1. slay 10 bats\n', '2. slay 10 undead soldiers\n']
     # #starting intro to game
     print(" Hello there! Welcome to the world of Grimm!")
     print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
