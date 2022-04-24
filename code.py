@@ -605,6 +605,7 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         crossroads()
     elif decision == 'debug':
         gconfig.hero_chance_to_evade = 0.7
+        game.gold = 10000
         crossroads()
     else:
         print('sorry, no such option is available\n')
