@@ -31,6 +31,8 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 ## Version History
 * 0.5.92
     * Enemies now vary by zone see [commit](https://github.com/Owenm05/Grimm-Tales/pull/16/commits)
+* 0.5.91
+    * Dexterity added see [commit](https://github.com/Owenm05/Grimm-Tales/commit/1564f4c8320e8c40c18d3e2ebeaa8d19dfb74cb0)
 * 0.5.6
     * Added Intro
 * 0.5.5
