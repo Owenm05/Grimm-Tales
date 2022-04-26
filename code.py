@@ -187,6 +187,7 @@ def golden_dunes_scene():
 def desert_trial():
     global game,gconfig
     game.location = desert_trial
+    attack_regular(desert_trial, desert_trial)
     
 def desert_village_scene():
     global game
@@ -483,7 +484,10 @@ def calc_enemy_dmg(enemy_base_dmg):
 # -=code for battles=-
 def attack_regular(previous_scene, location=None):
     global game, gconfig
-    if location == "graveyard":
+    if location == "desert_trial":
+        enemy_list = ['placeholder1', 'placeholder2', 'placeholder3']
+        enemy_name =enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "graveyard":
         enemy_list = ['zombie', 'undead soldier', 'undead archer']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
     elif location == "dark cave":
@@ -495,6 +499,7 @@ def attack_regular(previous_scene, location=None):
     randoms()
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
+    if location != "desert_trial":
     decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
