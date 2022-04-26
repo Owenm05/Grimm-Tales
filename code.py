@@ -181,8 +181,13 @@ def golden_dunes_scene():
     if decision == 'west' or decision == 'w':
         game.prev_location = golden_dunes_scene
         desert_village_scene()
-
-
+    if decision == 'east' or decision == 'e':
+        game.prev_location = golden_dunes_scene
+        desert_trial()
+def desert_trial():
+    global game,gconfig
+    game.location = desert_trial
+    
 def desert_village_scene():
     global game
     game.location = desert_village_scene
