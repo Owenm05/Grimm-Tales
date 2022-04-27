@@ -19,6 +19,7 @@ class Game:
         self.enemy_hp = 0
         self.player_dmg = 0
         self.enemy_dmg = 0
+        self.dungeon_kills = 0
         self.boss_hp = 500
         self.rank = "stranger"
         self.hp_drinks = 0
@@ -187,7 +188,16 @@ def golden_dunes_scene():
 def desert_trial():
     global game,gconfig
     game.location = desert_trial
-    attack_regular(desert_trial, desert_trial)
+    if game.dungeon_kills<=4:
+        game.dungeon_kills += 1
+        dungeon_fight(desert_trial, desert_trial)
+    elif game.dungeon_kills>=5:
+        print("you cleared the dungeon!")
+        game.gold += 10000
+        print("you got 10,000 gold as a reward")
+        game.prev_location = desert_trial
+        golden_dunes_scene()
+    
     
 def desert_village_scene():
     global game
@@ -499,7 +509,6 @@ def attack_regular(previous_scene, location=None):
     randoms()
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
-    if location != "desert_trial":
     decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
@@ -509,7 +518,7 @@ def attack_regular(previous_scene, location=None):
             if game.health >= 1:
                 if game.health < 25 and game.hp_drinks > 0:
                     game.hp_drinks -= 1
-                    game.health    += 50
+                    game.health += 50
                     print("you drink a hp drink vital and restored 50 health by this")
                 player_dmg = get_hero_dmg()
                 game.enemy_hp = game.enemy_hp - player_dmg
@@ -535,6 +544,52 @@ def attack_regular(previous_scene, location=None):
         attack_regular(previous_scene, location)
 
 
+
+def dungeon_fight(previous_scene, location=None):
+    global game, gconfig
+    enemy_list = ['placeholder1', 'placeholder2', 'placeholder3']
+    enemy_name =enemy_list[random.randint(0, len(enemy_list)-1)]
+    if location == "graveyard":
+        enemy_list = ['zombie', 'undead soldier', 'undead archer']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "dark cave":
+        enemy_list = ['bat', 'spider', 'undead archer']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
+    else:
+        enemy_list = ['bat', 'zombie', 'wolf', 'undead']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
+    randoms()
+    game.enemy_hp = game.enemy_level * 50
+    print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
+    while game.enemy_hp > 0 and game.health >= 1:
+        enemy_dmg = calc_enemy_dmg(game.enemy_dmg)
+        game.health = game.health - enemy_dmg
+        print('The enemy did', enemy_dmg, 'damage,', 'you have', game.health, 'health')
+        if game.health >= 1:
+            if game.health < 25 and game.hp_drinks > 0:
+                game.hp_drinks -= 1
+                game.health += 50
+                print("you drink a hp drink vital and restored 50 health by this")
+            player_dmg = get_hero_dmg()
+            game.enemy_hp = game.enemy_hp - player_dmg
+            if player_dmg == 0:
+                print('You missed!\n')
+            else:
+                if game.enemy_hp <= 0:
+                    game.enemy_hp=0
+                print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
+        elif game.health <= 0:
+            game.die()
+    if game.enemy_hp <= 0:
+        game.gold += 50
+        game.xp += game.enemy_level * 3
+        check_new_level()
+        print(game)
+        previous_scene()
+    else:
+        ##bugged
+        print('no such way!')
+        dungeon_fight(previous_scene, location)
 def bossfight(previous_scene):
     global game, gconfig
     global enemy
