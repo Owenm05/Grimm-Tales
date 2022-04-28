@@ -477,11 +477,12 @@ def get_hero_dmg():
     # -=multiply by 100 for easy math=-
     chance_to_hit = chance_to_hit * 100
     roll_5d20 = random.randint(1, 100)
-    if roll_5d20 < chance_to_hit:
-        print("You rolled a  ", roll_5d20, "you hit")
+    '''if roll_5d20 < chance_to_hit:
+        print("You rolled a  ", roll_5d20, "you hit")'''
+    #maybe remove the lines above
     if roll_5d20 > chance_to_hit:
         # -= missed! =-
-        calc_player_dmg = 0
+        calc_player_dmg = 0 
     return calc_player_dmg
 
 
