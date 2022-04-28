@@ -1,5 +1,5 @@
 # #imports are always on top
-import random
+import random, math
 
 
 class Game:
@@ -193,12 +193,26 @@ def desert_trial():
     if game.dungeon_kills   < 8:
         game.dungeon_kills += 1
         attack_regular(desert_trial, 'desert trial 1')
-    if game.dungeon_kills   < 11:
+    elif 8 <= game.dungeon_kills   < 11:
         print('dungeon kills now ', game.dungeon_kills)
+        if game.dungeon_kills == 8:
+            print('The Second stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
         game.dungeon_kills += 1
         attack_regular(desert_trial, 'desert trial 2')
-    if game.dungeon_kills   < 12:
+    elif 11 <= game.dungeon_kills  < 12:
         print('dungeon kills now ', game.dungeon_kills)
+        if game.dungeon_kills == 11:
+            print('The Third stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
         game.dungeon_kills += 1
         attack_regular(desert_trial, 'desert trial 3')
     elif game.dungeon_kills == 12:
@@ -526,7 +540,10 @@ def attack_regular(previous_scene, location=None):
     randoms(location)
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
-    decision = input('fight or flee?\n')
+    if location in ['desert trial 1', 'desert trial 2', 'desert trial 3']:
+        decision = 'fight'
+    else:
+        decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
             enemy_dmg = calc_enemy_dmg(game.enemy_dmg)
@@ -639,7 +656,7 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         print('please, type west, east, or north\n')
         crossroads()
     elif decision == 'debug':
-        gconfig.hero_chance_to_evade = 0.7
+        gconfig.hero_chance_to_evade = 0.1
         game.hp_drinks = 20
         game.equipped_weapon = ['trident']
         game.equipped_chest = ['desert chestplate']
