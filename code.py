@@ -1,5 +1,5 @@
 # #imports are always on top
-import random
+import random, math
 
 
 class Game:
@@ -178,20 +178,44 @@ def golden_dunes_scene():
     global game
     game.location = golden_dunes_scene
     print('''you can move either west to the desert village, north back to the southern pass, or east to the Serpent's Den''')
-    decision=input('choose either west, north, east')
+    decision=input('choose either west, north, east\n')
     if decision == 'west' or decision == 'w':
         game.prev_location = golden_dunes_scene
         desert_village_scene()
     if decision == 'east' or decision == 'e':
         game.prev_location = golden_dunes_scene
         desert_trial()
+
+
 def desert_trial():
     global game,gconfig
     game.location = desert_trial
-    if game.dungeon_kills<=4:
+    if game.dungeon_kills   < 8:
         game.dungeon_kills += 1
-        dungeon_fight(desert_trial, desert_trial)
-    elif game.dungeon_kills>=5:
+        attack_regular(desert_trial, 'desert trial 1')
+    elif 8 <= game.dungeon_kills   < 11:
+        print('dungeon kills now ', game.dungeon_kills)
+        if game.dungeon_kills == 8:
+            print('The Second stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
+        game.dungeon_kills += 1
+        attack_regular(desert_trial, 'desert trial 2')
+    elif 11 <= game.dungeon_kills  < 12:
+        print('dungeon kills now ', game.dungeon_kills)
+        if game.dungeon_kills == 11:
+            print('The Third stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
+        game.dungeon_kills += 1
+        attack_regular(desert_trial, 'desert trial 3')
+    elif game.dungeon_kills == 12:
         print("you cleared the dungeon!")
         game.gold += 10000
         print("you got 10,000 gold as a reward")
@@ -494,9 +518,16 @@ def calc_enemy_dmg(enemy_base_dmg):
 # -=code for battles=-
 def attack_regular(previous_scene, location=None):
     global game, gconfig
-    if location == "desert_trial":
-        enemy_list = ['placeholder1', 'placeholder2', 'placeholder3']
-        enemy_name =enemy_list[random.randint(0, len(enemy_list)-1)]
+    print(location)
+    if location == "desert trial 1":
+        enemy_list = ['scorpion', 'snake']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "desert trial 2":
+        enemy_list = ['champ of scroptions', 'champ of snakes']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "desert trial 3":
+        enemy_list = ['manticore', 'sphinx']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
     elif location == "graveyard":
         enemy_list = ['zombie', 'undead soldier', 'undead archer']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
@@ -506,10 +537,13 @@ def attack_regular(previous_scene, location=None):
     else:
         enemy_list = ['bat', 'zombie', 'wolf', 'undead']
         enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
-    randoms()
+    randoms(location)
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
-    decision = input('fight or flee?\n')
+    if location in ['desert trial 1', 'desert trial 2', 'desert trial 3']:
+        decision = 'fight'
+    else:
+        decision = input('fight or flee?\n')
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
             enemy_dmg = calc_enemy_dmg(game.enemy_dmg)
@@ -544,55 +578,8 @@ def attack_regular(previous_scene, location=None):
         attack_regular(previous_scene, location)
 
 
-
-def dungeon_fight(previous_scene, location=None):
-    global game, gconfig
-    enemy_list = ['placeholder1', 'placeholder2', 'placeholder3']
-    enemy_name =enemy_list[random.randint(0, len(enemy_list)-1)]
-    if location == "graveyard":
-        enemy_list = ['zombie', 'undead soldier', 'undead archer']
-        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
-    elif location == "dark cave":
-        enemy_list = ['bat', 'spider', 'undead archer']
-        enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
-    else:
-        enemy_list = ['bat', 'zombie', 'wolf', 'undead']
-        enemy_name = enemy_list[random.randint(0, len(enemy_list) - 1)]
-    randoms()
-    game.enemy_hp = game.enemy_level * 50
-    print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
-    while game.enemy_hp > 0 and game.health >= 1:
-        enemy_dmg = calc_enemy_dmg(game.enemy_dmg)
-        game.health = game.health - enemy_dmg
-        print('The enemy did', enemy_dmg, 'damage,', 'you have', game.health, 'health')
-        if game.health >= 1:
-            if game.health < 25 and game.hp_drinks > 0:
-                game.hp_drinks -= 1
-                game.health += 50
-                print("you drink a hp drink vital and restored 50 health by this")
-            player_dmg = get_hero_dmg()
-            game.enemy_hp = game.enemy_hp - player_dmg
-            if player_dmg == 0:
-                print('You missed!\n')
-            else:
-                if game.enemy_hp <= 0:
-                    game.enemy_hp=0
-                print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
-        elif game.health <= 0:
-            game.die()
-    if game.enemy_hp <= 0:
-        game.gold += 50
-        game.xp += game.enemy_level * 3
-        check_new_level()
-        print(game)
-        previous_scene()
-    else:
-        ##bugged
-        print('no such way!')
-        dungeon_fight(previous_scene, location)
 def bossfight(previous_scene):
     global game, gconfig
-    global enemy
     randoms()
     decision = input("Are you sure you want to progress, there is a strong enemy ahead?\n")
     if decision == 'turn back' or decision == 'back' or decision == 'no':
@@ -644,7 +631,7 @@ def crossroads():
                        ||                ||            \\\     ||      //
 TBC===Ocean===Beach===West==========Crossroads================East==============TBC
                                          ||                    || 
-                                        South             Broken Portal      
+                        Merchant========South             Broken Portal      
                                          ||
                   Desert Village===Golden Dunes===Serpent's Den
           ''')
@@ -669,7 +656,10 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         print('please, type west, east, or north\n')
         crossroads()
     elif decision == 'debug':
-        gconfig.hero_chance_to_evade = 0.7
+        gconfig.hero_chance_to_evade = 0.1
+        game.hp_drinks = 20
+        game.equipped_weapon = ['trident']
+        game.equipped_chest = ['desert chestplate']
         game.gold = 10000
         crossroads()
     else:
@@ -678,10 +668,17 @@ Do you want to move west, south, north, or move east? (type commands like w or w
     # #end code for the crossroads scene
 
 
-def randoms():
+def randoms(enemy_location=None):
     global game
     # -=code for randomized variable=-
-    game.enemy_level = random.randint(1, 5)
+    if enemy_location   == 'desert trial 2':
+        print('the second phase trial!')
+        game.enemy_level = random.randint(5, 7)
+    elif enemy_location == 'desert trial 3':
+        print('the third phase trial!')
+        game.enemy_level = random.randint(7, 10)
+    else:
+        game.enemy_level = random.randint(1, 5)
     game.enemy_dmg = random.randint(5, 10)
     game.player_dmg = random.randint(50, 100)
 
