@@ -507,7 +507,7 @@ def check_new_level():
 def calc_enemy_dmg(enemy_base_dmg):
     global game
     chance_to_evade = gconfig.hero_chance_to_evade + game.dex * gconfig.dex_evade_bonus
-    print("Your chance to evade is ", (chance_to_evade * 100), "%")
+    print("Your chance to evade is ", math.floor(int((chance_to_evade * 100)), "%"))
     chance_to_evade = chance_to_evade * 100
     roll_5d20 = random.randint(1, 100)
     if roll_5d20 <= chance_to_evade:
