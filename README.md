@@ -4,8 +4,6 @@
 
 This is a text based rpg that is ran in the python terminal.
 
-## Getting Started
-
 ### Dependencies
 
 python 3.6
