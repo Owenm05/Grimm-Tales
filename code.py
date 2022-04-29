@@ -192,9 +192,8 @@ def desert_trial():
     game.location = desert_trial
     if game.dungeon_kills   < 8:
         game.dungeon_kills += 1
-        attack_regular(desert_trial, 'desert trial 1')
+        attack_regular(desert_trial, 'desert trial 1', True)
     elif 8 <= game.dungeon_kills   < 11:
-        print('dungeon kills now ', game.dungeon_kills)
         if game.dungeon_kills == 8:
             print('The Second stage of the Trial is starting!')
             hp_station = math.ceil(game.max_health*0.8)
@@ -203,9 +202,8 @@ def desert_trial():
                 game.health = hp_station
                 print(f'The fountain of Health has restored {restored} HP!')
         game.dungeon_kills += 1
-        attack_regular(desert_trial, 'desert trial 2')
+        attack_regular(desert_trial, 'desert trial 2', True)
     elif 11 <= game.dungeon_kills  < 12:
-        print('dungeon kills now ', game.dungeon_kills)
         if game.dungeon_kills == 11:
             print('The Third stage of the Trial is starting!')
             hp_station = math.ceil(game.max_health*0.8)
@@ -214,11 +212,12 @@ def desert_trial():
                 game.health = hp_station
                 print(f'The fountain of Health has restored {restored} HP!')
         game.dungeon_kills += 1
-        attack_regular(desert_trial, 'desert trial 3')
+        attack_regular(desert_trial, 'desert trial 3', True)
     elif game.dungeon_kills == 12:
         print("you cleared the dungeon!")
-        game.gold += 10000
         print("you got 10,000 gold as a reward")
+        game.gold += 10000
+        print(game)
         game.prev_location = desert_trial
         golden_dunes_scene()
     
@@ -459,32 +458,39 @@ def villageinn():
 ##end code for village ============================================================================================================
 
 
+def calc_enemy_dmg(enemy_base_dmg):
+    global game
+    chance_to_evade = (round(gconfig.hero_chance_to_evade + game.dex * gconfig.dex_evade_bonus, 2))*100
+    chance_to_evade = chance_to_evade
+    roll_5d20 = random.randint(1, 100)
+    if roll_5d20 <= chance_to_evade:
+        print("Your chance to evade is ", chance_to_evade, "%")
+        print("You rolled ", roll_5d20, ", and thus enemy missed")
+        enemy_base_dmg = 0
+    return enemy_base_dmg
+
+
 def get_hero_dmg():
     global game, gconfig
     calc_player_dmg = game.player_dmg + (2 ^ game.player_level) + game.str * 5
     # please note, you should take in DECREMENTAL ORDER BY ATK POWER
     if 'gods_bane' in game.equipped_weapon:
         calc_player_dmg += gconfig.gods_bane_atk
-    if 'scarab blade' in game.equipped_weapon:
+    elif 'scarab blade' in game.equipped_weapon:
         calc_player_dmg += gconfig.scarab_blade_atk
-        print('your attack is improved by your scarab blade')
+        #print('your attack is improved by your scarab blade')
     elif 'damassk sword' in game.equipped_weapon:
         calc_player_dmg += gconfig.damask_sword_atk
-        print('your attack is improved by your damassk sword')
+        #print('your attack is improved by your damassk sword')
     elif 'trident' in game.equipped_weapon:
         calc_player_dmg += gconfig.trident_atk
-        print('your attack is improved by your trident')
-    chance_to_hit = gconfig.hero_chance_to_hit + game.dex * gconfig.dex_accuracy_bonus
-    print("Your chance to hit is",  (chance_to_hit*100), "%")
-    # -=multiply by 100 for easy math=-
-    chance_to_hit = chance_to_hit * 100
+        #print('your attack is improved by your trident')
+    chance_to_hit = round(gconfig.hero_chance_to_hit + game.dex * gconfig.dex_accuracy_bonus, 2)*100
     roll_5d20 = random.randint(1, 100)
-    '''if roll_5d20 < chance_to_hit:
-        print("You rolled a  ", roll_5d20, "you hit")'''
-    #maybe remove the lines above
     if roll_5d20 > chance_to_hit:
-        # -= missed! =-
-        calc_player_dmg = 0 
+        print("Your chance to hit is", chance_to_hit, "%")
+        print("You rolled ", roll_5d20, ", and thus you have missed")
+        calc_player_dmg = 0
     return calc_player_dmg
 
 
@@ -506,22 +512,11 @@ def check_new_level():
         game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.con * 10
 
 
-def calc_enemy_dmg(enemy_base_dmg):
-    global game
-    chance_to_evade = gconfig.hero_chance_to_evade + game.dex * gconfig.dex_evade_bonus
-    print("Your chance to evade is ", math.floor(int((chance_to_evade * 100)), "%"))
-    chance_to_evade = chance_to_evade * 100
-    roll_5d20 = random.randint(1, 100)
-    if roll_5d20 <= chance_to_evade:
-        print("You rolled a  ", roll_5d20, " , and thus enemy missed")
-        enemy_base_dmg = 0
-    return enemy_base_dmg
-
-
 # -=code for battles=-
-def attack_regular(previous_scene, location=None):
+def attack_regular(previous_scene, location=None, trial=False):
     global game, gconfig
-    print(location)
+    if not trial:
+        print(location)
     if location == "desert trial 1":
         enemy_list = ['scorpion', 'snake']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
@@ -550,8 +545,9 @@ def attack_regular(previous_scene, location=None):
     if decision == 'fight' or decision =='1':
         while game.enemy_hp > 0 and game.health >= 1:
             enemy_dmg = calc_enemy_dmg(game.enemy_dmg)
-            game.health = game.health - enemy_dmg
-            print('The enemy did', enemy_dmg, 'damage,', 'you have', game.health, 'health')
+            if enemy_dmg != 0:
+                game.health = game.health - enemy_dmg
+                print('The enemy did', enemy_dmg, 'damage,', 'you have', game.health, 'health')
             if game.health >= 1:
                 if game.health < 25 and game.hp_drinks > 0:
                     game.hp_drinks -= 1
@@ -559,9 +555,7 @@ def attack_regular(previous_scene, location=None):
                     print("you drink a hp drink vital and restored 50 health by this")
                 player_dmg = get_hero_dmg()
                 game.enemy_hp = game.enemy_hp - player_dmg
-                if player_dmg == 0:
-                    print('You missed!\n')
-                else:
+                if player_dmg != 0:
                     if game.enemy_hp <= 0:
                         game.enemy_hp=0
                     print('You did', player_dmg, 'damage,', 'the enemy has', game.enemy_hp, 'hp\n')
@@ -571,7 +565,8 @@ def attack_regular(previous_scene, location=None):
             game.gold += 50
             game.xp += game.enemy_level * 3
             check_new_level()
-            print(game)
+            if not trial:
+                print(game)
             previous_scene()
     elif decision == 'flee':
         previous_scene()
@@ -676,10 +671,8 @@ def randoms(enemy_location=None):
     global game
     # -=code for randomized variable=-
     if enemy_location   == 'desert trial 2':
-        print('the second phase trial!')
         game.enemy_level = random.randint(5, 7)
     elif enemy_location == 'desert trial 3':
-        print('the third phase trial!')
         game.enemy_level = random.randint(7, 10)
     else:
         game.enemy_level = random.randint(1, 5)
