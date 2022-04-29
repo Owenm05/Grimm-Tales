@@ -194,7 +194,6 @@ def desert_trial():
         game.dungeon_kills += 1
         attack_regular(desert_trial, 'desert trial 1')
     elif 8 <= game.dungeon_kills   < 11:
-        print('dungeon kills now ', game.dungeon_kills)
         if game.dungeon_kills == 8:
             print('The Second stage of the Trial is starting!')
             hp_station = math.ceil(game.max_health*0.8)
@@ -205,7 +204,6 @@ def desert_trial():
         game.dungeon_kills += 1
         attack_regular(desert_trial, 'desert trial 2')
     elif 11 <= game.dungeon_kills  < 12:
-        print('dungeon kills now ', game.dungeon_kills)
         if game.dungeon_kills == 11:
             print('The Third stage of the Trial is starting!')
             hp_station = math.ceil(game.max_health*0.8)
@@ -672,10 +670,8 @@ def randoms(enemy_location=None):
     global game
     # -=code for randomized variable=-
     if enemy_location   == 'desert trial 2':
-        print('the second phase trial!')
         game.enemy_level = random.randint(5, 7)
     elif enemy_location == 'desert trial 3':
-        print('the third phase trial!')
         game.enemy_level = random.randint(7, 10)
     else:
         game.enemy_level = random.randint(1, 5)
