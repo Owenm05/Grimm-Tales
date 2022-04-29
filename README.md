@@ -4,8 +4,6 @@
 
 This is a text based rpg that is ran in the python terminal.
 
-## Getting Started
-
 ### Dependencies
 
 python 3.6
@@ -29,6 +27,8 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 * Areso
 
 ## Version History
+* 0.6.0
+    * Dungeons are now better see both [commit 1](https://github.com/Owenm05/Grimm-Tales/commit/5b28a7be04988ebf313b4dcf838959bcd5f19fd4) and [commit 2](https://github.com/Owenm05/Grimm-Tales/commit/da453cff7d68d1d748461c0a4e51d0ee952a6520)
 * 0.5.92
     * Enemies now vary by zone see [commit](https://github.com/Owenm05/Grimm-Tales/pull/16/commits)
 * 0.5.91
@@ -39,10 +39,10 @@ For any further questions feel free to contact me at mautustrike@gmail.com
     * Fixed bug with boss fight
     * Added comfirmation for boss fight
     * see [commit](https://github.com/Owenm05/Grimm-Tales/commit/0651d360da2d0c8a84b9bed26e3ef8b7faf8f7ad) for updates
-* 0.5
+* 0.5.0
     * Various bug fixes and optimizations
     * See [commit](https://github.com/Owenm05/Grimm-Tales/commit/32d7b686396196ead3fbb10144a3afb274d5b2d5)
-* 0.1
+* 0.1.0
     * Initial Release
 
 ## License

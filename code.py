@@ -65,7 +65,7 @@ class Config:
         self.trident_atk = 50
         self.scarab_blade_price = 5000
         self.scarab_blade_atk = 200
-
+        self.gods_bane_atk = 100000
 
 class Story:
     def __init__(self):
@@ -461,6 +461,8 @@ def get_hero_dmg():
     global game, gconfig
     calc_player_dmg = game.player_dmg + (2 ^ game.player_level) + game.str * 5
     # please note, you should take in DECREMENTAL ORDER BY ATK POWER
+    if 'gods_bane' in game.equipped_weapon:
+        calc_player_dmg += gconfig.gods_bane_atk
     if 'scarab blade' in game.equipped_weapon:
         calc_player_dmg += gconfig.scarab_blade_atk
         print('your attack is improved by your scarab blade')
@@ -475,11 +477,12 @@ def get_hero_dmg():
     # -=multiply by 100 for easy math=-
     chance_to_hit = chance_to_hit * 100
     roll_5d20 = random.randint(1, 100)
-    if roll_5d20 < chance_to_hit:
-        print("You rolled a  ", roll_5d20, "you hit")
+    '''if roll_5d20 < chance_to_hit:
+        print("You rolled a  ", roll_5d20, "you hit")'''
+    #maybe remove the lines above
     if roll_5d20 > chance_to_hit:
         # -= missed! =-
-        calc_player_dmg = 0
+        calc_player_dmg = 0 
     return calc_player_dmg
 
 
@@ -504,7 +507,7 @@ def check_new_level():
 def calc_enemy_dmg(enemy_base_dmg):
     global game
     chance_to_evade = gconfig.hero_chance_to_evade + game.dex * gconfig.dex_evade_bonus
-    print("Your chance to evade is ", (chance_to_evade * 100), "%")
+    print("Your chance to evade is ", math.floor(int((chance_to_evade * 100)), "%"))
     chance_to_evade = chance_to_evade * 100
     roll_5d20 = random.randint(1, 100)
     if roll_5d20 <= chance_to_evade:
@@ -656,8 +659,9 @@ Do you want to move west, south, north, or move east? (type commands like w or w
     elif decision == 'debug':
         gconfig.hero_chance_to_evade = 0.1
         game.hp_drinks = 20
-        game.equipped_weapon = ['trident']
+        game.equipped_weapon = ['gods_bane']
         game.equipped_chest = ['desert chestplate']
+        game.equipped_head = ['developers_crown']
         game.gold = 10000
         crossroads()
     else:
