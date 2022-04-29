@@ -65,7 +65,7 @@ class Config:
         self.trident_atk = 50
         self.scarab_blade_price = 5000
         self.scarab_blade_atk = 200
-
+        self.gods_bane_atk = 100000
 
 class Story:
     def __init__(self):
@@ -463,6 +463,8 @@ def get_hero_dmg():
     global game, gconfig
     calc_player_dmg = game.player_dmg + (2 ^ game.player_level) + game.str * 5
     # please note, you should take in DECREMENTAL ORDER BY ATK POWER
+    if 'gods_bane' in game.equipped_weapon:
+        calc_player_dmg += gconfig.gods_bane_atk
     if 'scarab blade' in game.equipped_weapon:
         calc_player_dmg += gconfig.scarab_blade_atk
         print('your attack is improved by your scarab blade')
@@ -659,8 +661,9 @@ Do you want to move west, south, north, or move east? (type commands like w or w
     elif decision == 'debug':
         gconfig.hero_chance_to_evade = 0.1
         game.hp_drinks = 20
-        game.equipped_weapon = ['trident']
+        game.equipped_weapon = ['gods_bane']
         game.equipped_chest = ['desert chestplate']
+        game.equipped_head = ['developers_crown']
         game.gold = 10000
         crossroads()
     else:
