@@ -10,10 +10,10 @@ class Game:
         self.quest = ""
         self.str = random.randrange(1, 7)
         self.res = random.randrange(1, 7)
-        self.dex = gconfig.points - self.str - self.con
+        self.dex = gconfig.points - self.str - self.res
         self.player_level = 1
         self.unspent_points = 0
-        self.max_health = health + self.player_level * 5 + self.con * 10
+        self.max_health = health + self.player_level * 5 + self.res * 10
         self.health = self.max_health
         self.enemy_level = 1
         self.enemy_hp = 0
@@ -202,14 +202,17 @@ def desert_trial():
         attack_regular(desert_trial, 'desert trial 1', True)
     elif 8 <= game.dungeon_kills   < 11:
         if game.dungeon_kills == 8:
-            print('The Second stage of the Trial is starting!')
-            hp_station = math.ceil(game.max_health*0.8)
-            if game.health < hp_station:
-                restored = hp_station - game.health
-                game.health = hp_station
-                print(f'The fountain of Health has restored {restored} HP!')
-        game.dungeon_kills += 1
-        attack_regular(desert_trial, 'desert trial 2', True)
+            print("you take a moment to stop and rest")
+            decision= input('Are you ready to continue?')
+            if decision == 'yes' or decision == 'continue':
+                print('The Second stage of the Trial is starting!')
+                hp_station = math.ceil(game.max_health*0.8)
+                if game.health < hp_station:
+                    restored = hp_station - game.health
+                    game.health = hp_station
+                    print(f'The fountain of Health has restored {restored} HP!')
+            game.dungeon_kills += 1
+            attack_regular(desert_trial, 'desert trial 2', True)
     elif 11 <= game.dungeon_kills  < 12:
         if game.dungeon_kills == 11:
             print('The Third stage of the Trial is starting!')
