@@ -202,15 +202,12 @@ def desert_trial():
         attack_regular(desert_trial, 'desert trial 1', True)
     elif 8 <= game.dungeon_kills   < 11:
         if game.dungeon_kills == 8:
-            print("you take a moment to stop and rest")
-            decision= input('Are you ready to continue?')
-            if decision == 'yes' or decision == 'continue':
-                print('The Second stage of the Trial is starting!')
-                hp_station = math.ceil(game.max_health*0.8)
-                if game.health < hp_station:
-                    restored = hp_station - game.health
-                    game.health = hp_station
-                    print(f'The fountain of Health has restored {restored} HP!')
+            print('The Second stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
             game.dungeon_kills += 1
             attack_regular(desert_trial, 'desert trial 2', True)
     elif 11 <= game.dungeon_kills  < 12:
@@ -473,6 +470,7 @@ def calc_enemy_dmg(enemy_base_dmg):
     chance_to_evade = (round(gconfig.hero_chance_to_evade + game.dex * gconfig.dex_evade_bonus, 2))*100
     chance_to_evade = chance_to_evade
     roll_5d20 = random.randint(1, 100)
+    status_inflict = random.randint(1,50+ game.res)
     if roll_5d20 <= chance_to_evade:
         print("Your chance to evade is ", chance_to_evade, "%")
         print("You rolled ", roll_5d20, ", and thus enemy missed")
