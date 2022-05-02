@@ -9,7 +9,7 @@ class Game:
         self.xp = xp
         self.quest = ""
         self.str = random.randrange(1, 7)
-        self.con = random.randrange(1, 7)
+        self.res = random.randrange(1, 7)
         self.dex = gconfig.points - self.str - self.con
         self.player_level = 1
         self.unspent_points = 0
@@ -31,7 +31,7 @@ class Game:
         self.equipped_legs = []
         self.equipped_feet = []
         self.equipped_head = []
-
+        self.player_status = []
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
 
@@ -72,7 +72,10 @@ class Story:
         self.beach_story = "You decide to walk barefoot along the clean beach. The waves lap at your feet. you can see someone standing on a dock in the distance"
         self.southern_story = 'A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n'
         self.eastern_story = "'North of you you see a village, to the west of you is a crossroad, to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
-
+        self.northern_story = '''you unlock the gate with the ancient key.\n 
+The sound of a powerful mechanism at work can be heard as the gate slowly opens.\n
+In the distance you see a mountain range commonly called The Severed Highlands.\n
+Would you like to go to The Severed Highlands, or turn back?'''
 
 # -=start code for game endings=-
 def ending_cave_collapsed():
@@ -137,19 +140,20 @@ def eastern_scene():
 
 
 def northern_scene():
-    global game
+    global game,gstory
     game.location = northern_scene
     print('''Two colossal stone statues stand on the sides of a gigantic stone gate.\n
 Upon closer inspection of the gate you find a keyhole at the base of one of the doors.''')
     if 'ancient key' in game.key_items:
-        print('''you unlock the gate with the ancient key.\n 
-The sound of a powerful mechanism at work can be heard as the gate slowly opens.\n
-In the distance you see a mountain range commonly called The Severed Highlands.\n
-Would you like to go to The Severed Highlands, or turn back?''')
+        print(gstory.northern_story)
         decision = input('choose either n, or s')
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
-            # #add mountain code
+            game.prev_location = northern_scene
+            severed_highlands_scene()
+def severed_highlands_scene():
+    global game
+    game.location = servered_highlands_scene
 
 
 # -=code for desert path=-
@@ -182,9 +186,12 @@ def golden_dunes_scene():
     if decision == 'west' or decision == 'w':
         game.prev_location = golden_dunes_scene
         desert_village_scene()
-    if decision == 'east' or decision == 'e':
+    elif decision == 'east' or decision == 'e':
         game.prev_location = golden_dunes_scene
         desert_trial()
+    elif decision == 'n' or decision == 'north':
+        game.prev_location == golden_dunes_scene
+        southern_scene()
 
 
 def desert_trial():
@@ -350,7 +357,7 @@ def enter_hero_screen():
 hp  | {game.health} / {game.max_health}
 str | {game.str}
 dex | {game.dex}
-con | {game.con}
+res | {game.res}
 You have {game.unspent_points} to improve stats.
     ''')
     if game.unspent_points>0:
@@ -507,9 +514,9 @@ def check_new_level():
         elif stat_increase == 2:
             game.dex += 1
         elif stat_increase == 3:
-            game.con += 1
+            game.res += 1
     if bool_level_changed:
-        game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.con * 10
+        game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.res * 10
 
 
 # -=code for battles=-
