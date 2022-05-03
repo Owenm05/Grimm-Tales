@@ -208,9 +208,10 @@ def desert_trial():
                 restored = hp_station - game.health
                 game.health = hp_station
                 print(f'The fountain of Health has restored {restored} HP!')
-            game.dungeon_kills += 1
-            attack_regular(desert_trial, 'desert trial 2', True)
-    elif 11 <= game.dungeon_kills  < 12:
+            while game.dungeon_kills<11:
+                game.dungeon_kills += 1
+                attack_regular(desert_trial, 'desert trial 2', True)
+    elif 11 <= game.dungeon_kills and game.dungeon_kills < 12:
         if game.dungeon_kills == 11:
             print('The Third stage of the Trial is starting!')
             hp_station = math.ceil(game.max_health*0.8)
@@ -224,6 +225,7 @@ def desert_trial():
         print("you cleared the dungeon!")
         print("you got 10,000 gold as a reward")
         game.gold += 10000
+        game.dungeon_kills = 0
         print(game)
         game.prev_location = desert_trial
         golden_dunes_scene()
