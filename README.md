@@ -20,11 +20,9 @@ python 3.6
 For any further questions feel free to contact me at mautustrike@gmail.com
 
 ## Authors
-* Created by Owenm05 
+* Code Created by Owenm05 and Areso
 
 ### Contributors names
-
-* Areso
 
 ## Version History
 * 0.7.0 new storyline
