@@ -7,7 +7,7 @@ class Game:
         global gconfig
         self.gold = gold
         self.xp = xp
-        self.quest = ""
+        self.quest = []
         self.str = random.randrange(1, 7)
         self.res = random.randrange(1, 7)
         self.dex = gconfig.points - self.str - self.res
@@ -119,7 +119,7 @@ def eastern_scene():
     global game
     game.location = eastern_scene
     print(gstory.eastern_story)
-    decision = input('choose either n, w, nw or ne\n')
+    decision = input('choose either n, w, nw, s or ne\n')
     if decision == 'northeast' or decision == 'ne':
         print('You walk into the graveyard')
         attack_regular(eastern_scene, 'graveyard')
@@ -167,6 +167,15 @@ def broken_portal():
     decision = input('Would you like to accept this quest?\n')
     if decision == 'y' or decision == 'yes':
         print("You have accepted the hero's quest\n")
+        game.quest.append("hero's quest")
+        print("you have taken the quest. The first gem resides where the serpant lies\n")
+        game.prev_location = broken_portal
+        eastern_scene()
+    elif decision == 'n' or decision == 'no':
+        print("you decline the spirit. He replies 'feel free to reconsider!' you return to the east\n")
+        game.prev_location = broken_portal
+        eastern_scene()
+        
 # -=code for desert path=-
 def southern_scene():
     global game
@@ -199,7 +208,14 @@ def golden_dunes_scene():
         desert_village_scene()
     elif decision == 'east' or decision == 'e':
         game.prev_location = golden_dunes_scene
-        desert_trial()
+        if "hero's quest" in game.quest and "Yellow gem" not in game.key_items:
+            desert_trial()
+        elif "Yellow gem" in game.key_items:
+            print("you already have beaten this trial, there is no need to return.\n")
+            golden_dunes_scene()
+        else:
+            print("you don't have a reason to enter the serpent's den (maybe you are missing a quest?)\n")
+            golden_dunes_scene()
     elif decision == 'n' or decision == 'north':
         game.prev_location == golden_dunes_scene
         southern_scene()
@@ -236,7 +252,8 @@ def desert_trial():
         print("you cleared the dungeon!")
         print("you got 10,000 gold as a reward")
         game.gold += 10000
-        game.dungeon_kills = 0
+        game.key_items.append("Yellow gem")
+        print("you have gotten the Yellow gem!")
         print(game)
         game.prev_location = desert_trial
         golden_dunes_scene()
@@ -677,6 +694,9 @@ Do you want to move west, south, north, or move east? (type commands like w or w
     elif decision == 'debug':
         gconfig.hero_chance_to_evade = 0.1
         game.hp_drinks = 20
+        game.dex = 999
+        game.res = 999
+        game.str = 999
         game.equipped_weapon = ['gods_bane']
         game.equipped_chest = ['desert chestplate']
         game.equipped_head = ['developers_crown']
