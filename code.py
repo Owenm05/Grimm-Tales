@@ -131,8 +131,11 @@ def eastern_scene():
     elif decision == 'w' or decision == 'west':
         game.prev_location = eastern_scene
         crossroads()
+    elif decision == 's' or decision == 'south':
+        game.prev_location = eastern_scene
+        broken_portal()
     elif decision == 'help' or decision == 'h':
-        print('ne, n, nw, w\n')
+        print('ne, n, nw, w,s\n')
         eastern_scene()
     else:
         print('sorry, no such option is available\n')
@@ -155,7 +158,15 @@ def severed_highlands_scene():
     global game
     game.location = servered_highlands_scene
 
-
+def broken_portal():
+    global game
+    game.location = broken_portal
+    print("you see a broken portal ahead of you\n")
+    print("The portal has five slots; one had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once upon a time this land had bountiful resources and bothe the human’s and demons lived peaceful lives. But this peace was not to last forever.  One day the imperial demon army charged through the gate, they destroyed and pillaged everything in sight. Eventually one hero stood against the demons and won. The hero ended up sealing the demons in their home world, and destroying the one way for them to break through, the portal through the sacred gem. But as of recently the demons have been growing more powerful and have almost found a way to create a new portal. All of the gems besides the gray one were lost to time. It is now your job to repair the portal and defeat the demons that lay within.\n")
+    print(" The sprit then reveals that he is the ghost of that very hero who saved the world\n")
+    decision = input('Would you like to accept this quest?\n')
+    if decision == 'y' or decision == 'yes':
+        print("You have accepted the hero's quest\n")
 # -=code for desert path=-
 def southern_scene():
     global game
