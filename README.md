@@ -27,6 +27,10 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 * Areso
 
 ## Version History
+* 0.7.0 new storyline
+    * there is now a new story see [commit](https://github.com/Owenm05/Grimm-Tales/commit/4207656c4d9cacfd13992ddee1e255ff64a3f847)
+    * Storyline was updated see [commit](https://github.com/Owenm05/Grimm-Tales/commit/08903ef1aeb0b03fd23d9b68219f5b6848721c7e)
+* 0.6.5 dungeons are better now
 * 0.6.0
     * Dungeons are now better see both [commit 1](https://github.com/Owenm05/Grimm-Tales/commit/5b28a7be04988ebf313b4dcf838959bcd5f19fd4) and [commit 2](https://github.com/Owenm05/Grimm-Tales/commit/da453cff7d68d1d748461c0a4e51d0ee952a6520)
 * 0.5.92
