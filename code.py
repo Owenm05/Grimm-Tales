@@ -8,6 +8,7 @@ class Game:
         self.gold = gold
         self.xp = xp
         self.quest = []
+        self.gem_count=0
         self.str = random.randrange(1, 7)
         self.res = random.randrange(1, 7)
         self.dex = gconfig.points - self.str - self.res
@@ -33,7 +34,7 @@ class Game:
         self.equipped_head = []
         self.player_status = []
     def __str__(self):
-        return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank
+        return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank + "\nyou have " + str(self.gem_count) + " gem/gems"
 
     def die(self):
         dice_d20 = random.randrange(1, 20)
@@ -75,7 +76,7 @@ class Story:
         self.northern_story = '''you unlock the gate with the ancient key.\n 
 The sound of a powerful mechanism at work can be heard as the gate slowly opens.\n
 In the distance you see a mountain range commonly called The Severed Highlands.\n
-Would you like to go to The Severed Highlands, or turn back?'''
+Would you like to go to The Severed Highlands, or turn back?\n'''
 
 # -=start code for game endings=-
 def ending_cave_collapsed():
@@ -146,18 +147,81 @@ def northern_scene():
     global game,gstory
     game.location = northern_scene
     print('''Two colossal stone statues stand on the sides of a gigantic stone gate.\n
-Upon closer inspection of the gate you find a keyhole at the base of one of the doors.''')
+Upon closer inspection of the gate you find a keyhole at the base of one of the doors.\n''')
     if 'ancient key' in game.key_items:
         print(gstory.northern_story)
-        decision = input('choose either n, or s')
+        decision = input('choose either n, or s\n')
         if decision == 'north' or decision == 'n':
             print('You walk to the base of the nearest mountain')
             game.prev_location = northern_scene
             severed_highlands_scene()
+        elif decision == 's' or decision == 'south':
+            game.prev_location = game.location
+            crossroads()
+    else:
+        game.prev_scene = game.location
+        print("finding no way to open the gate you return to the crossroads\n")
+        crossroads()
 def severed_highlands_scene():
     global game
-    game.location = servered_highlands_scene
-
+    game.location = severed_highlands_scene
+    print("you can either go south to the gate or east to the abyssal depths\n")
+    decision = input('choose either s or e\n')
+    if decision == 's' or decision == 'south':
+        print("You return to the gate\n")
+        game.prev_location = severed_highlands_scene
+        northern_scene()
+    elif decision == 'e' or decision == 'east':
+        if 'Purple gem' not in game.key_items and "hero's quest" in game.quest:
+            print(" you see a deep pit and walk towards it\n")
+            game.prev_location = severed_highlands_scene
+            abyssal_depths_scene()
+        elif "hero's quest" not in game.quest:
+            print("you have no need to enter. Try to find the quest needed to enter.")
+            severed_highlands_scene()
+        elif "Purple gem" in game.key_items:
+            print("you already have beaten this trial, there is no need to return.\n")
+        else:
+            print("error")
+            severed_highlands_scene()
+def abyssal_depths_scene():
+    global game,gconfig
+    game.location = abyssal_depths_scene
+    if game.dungeon_kills   < 8:
+        game.dungeon_kills += 1
+        attack_regular(abyssal_depths_scene, 'abyssal depths 1', True)
+    elif 8 <= game.dungeon_kills   < 11:
+        if game.dungeon_kills == 8:
+            print('The Second stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
+            while game.dungeon_kills<11:
+                game.dungeon_kills += 1
+                attack_regular(abyssal_depths_scene, 'abyssal depths 2', True)
+    elif 11 <= game.dungeon_kills and game.dungeon_kills < 12:
+        if game.dungeon_kills == 11:
+            print('The Third stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
+        game.dungeon_kills += 1
+        attack_regular(abyssal_depths_scene, 'abyssal depths 3', True)
+    elif game.dungeon_kills == 12:
+        print("you cleared the dungeon!")
+        print("you got 10,000 gold as a reward")
+        game.gold += 10000
+        game.key_items= game.key_items+"Purple gem"
+        print("you have gotten the Purple gem!")
+        game.gem_count +=1
+        game.dungeon_kills=0
+        print(game)
+        game.prev_location = abyssal_depths_scene
+        severed_highlands_scene()
 def broken_portal():
     global game
     game.location = broken_portal
@@ -252,8 +316,10 @@ def desert_trial():
         print("you cleared the dungeon!")
         print("you got 10,000 gold as a reward")
         game.gold += 10000
-        game.key_items.append("Yellow gem")
+        game.key_items= game.key_items+ "Yellow gem"
         print("you have gotten the Yellow gem!")
+        game.gem_count += 1
+        game.dungeon_kills = 0
         print(game)
         game.prev_location = desert_trial
         golden_dunes_scene()
@@ -564,6 +630,15 @@ def attack_regular(previous_scene, location=None, trial=False):
     elif location == "desert trial 3":
         enemy_list = ['manticore', 'sphinx']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "abyssal depths 1":
+        enemy_list = ['lesser demon', 'ghoul']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "abyssal depths 2":
+        enemy_list = ['shade', 'cursed golem']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "abyssal depths 3":
+        enemy_list = ['soul eater', 'greater demon']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
     elif location == "graveyard":
         enemy_list = ['zombie', 'undead soldier', 'undead archer']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
@@ -576,7 +651,7 @@ def attack_regular(previous_scene, location=None, trial=False):
     randoms(location)
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
-    if location in ['desert trial 1', 'desert trial 2', 'desert trial 3']:
+    if location in ['desert trial 1', 'desert trial 2', 'desert trial 3', 'abyssal depths 1','abyssal depths 2','abyssal depths 3']:
         decision = 'fight'
     else:
         decision = input('fight or flee?\n')
@@ -609,7 +684,6 @@ def attack_regular(previous_scene, location=None, trial=False):
     elif decision == 'flee':
         previous_scene()
     else:
-        ##bugged
         print('no such way!')
         attack_regular(previous_scene, location)
 
@@ -701,6 +775,7 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         game.equipped_chest = ['desert chestplate']
         game.equipped_head = ['developers_crown']
         game.gold = 10000
+        game.key_items=('ancient key')
         crossroads()
     else:
         print('sorry, no such option is available\n')
@@ -726,7 +801,7 @@ if __name__ == "__main__":
     game = Game(0, 1, gconfig.default_hero_health)
     game.prev_location = ""
     gstory = Story()
-    questlist = ['1. slay 10 bats\n', '2. slay 10 undead soldiers\n']
+    questlist = ['1. slay 10 Bandits\n', '2. slay 10 undead soldiers\n']
     # #starting intro to game
     print(" Hello there! Welcome to the world of Grimm!")
     print("\nMy name is Arcus but you can call me The Narrator of this story, as well as the God of this world!")
