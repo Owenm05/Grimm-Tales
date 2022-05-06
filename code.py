@@ -3,11 +3,12 @@ import random, math
 
 
 class Game:
-    def __init__(self, gold, xp, health):
+    def __init__(self, gold, xp, health,qp):
         global gconfig
         self.gold = gold
         self.xp = xp
         self.quest = []
+        self.qp= qp
         self.gem_count=0
         self.str = random.randrange(1, 7)
         self.res = random.randrange(1, 7)
@@ -23,6 +24,7 @@ class Game:
         self.dungeon_kills = 0
         self.boss_hp = 500
         self.rank = "stranger"
+        self.quest_points=1
         self.hp_drinks = 0
         self.equipped_weapon = []
         self.prev_location = ""
@@ -52,6 +54,7 @@ class Game:
 class Config:
     def __init__(self):
         self.levels = {1: 0, 2: 25, 3: 75, 4: 150, 5: 250, 6: 375, 7: 525, 8: 700, 9: 900, 10: 1150, 11: 1450, 12: 1800}
+        self.ranks = {1: 1, 2: 5, 3: 10, 4: 20, 5: 40, 6: 80, 7: 160, 8: 320, 9: 640}
         self.points = 15
         self.hero_chance_to_evade = 0.1
         self.dex_evade_bonus = 0.01
@@ -106,6 +109,8 @@ def western_scene():
         print('you run to the sandy beach and dip your feet in the water')
         game.prev_location = western_scene
         beach_scene()
+    elif decision == 'help':
+        print('please, type south, or north\n')
 
 
 def beach_scene():
@@ -124,7 +129,7 @@ def eastern_scene():
     if decision == 'northeast' or decision == 'ne':
         print('You walk into the graveyard')
         attack_regular(eastern_scene, 'graveyard')
-    elif decision == 'nw':
+    elif decision == 'nw' and 'ancient key' not in game.key_items:
         bossfight(eastern_scene)
     elif decision == 'n':
         game.prev_location = eastern_scene
@@ -137,6 +142,12 @@ def eastern_scene():
         broken_portal()
     elif decision == 'help' or decision == 'h':
         print('ne, n, nw, w,s\n')
+        eastern_scene()
+    elif decision == 'nw' and 'ancient key' in game.key_items:
+        print("you already have defeated this boss")
+        eastern_scene()
+    elif decision == 'help':
+        print('please, type west, east,south, northeast, northwest, or north\n')
         eastern_scene()
     else:
         print('sorry, no such option is available\n')
@@ -158,6 +169,8 @@ Upon closer inspection of the gate you find a keyhole at the base of one of the 
         elif decision == 's' or decision == 'south':
             game.prev_location = game.location
             crossroads()
+        elif decision == 'help':
+        print('please, type south, or north\n')
     else:
         game.prev_scene = game.location
         print("finding no way to open the gate you return to the crossroads\n")
@@ -181,6 +194,8 @@ def severed_highlands_scene():
             severed_highlands_scene()
         elif "Purple gem" in game.key_items:
             print("you already have beaten this trial, there is no need to return.\n")
+        elif decision == 'help':
+        print('please, type south, or east\n')
         else:
             print("error")
             severed_highlands_scene()
@@ -219,6 +234,8 @@ def abyssal_depths_scene():
         print("you have gotten the Purple gem!")
         game.gem_count +=1
         game.dungeon_kills=0
+        game.qp+=1
+        print("you have ", game.qp,  " questpoints\n")
         print(game)
         game.prev_location = abyssal_depths_scene
         severed_highlands_scene()
@@ -226,7 +243,7 @@ def broken_portal():
     global game
     game.location = broken_portal
     print("you see a broken portal ahead of you\n")
-    print("The portal has five slots; one had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once upon a time this land had bountiful resources and bothe the human’s and demons lived peaceful lives. But this peace was not to last forever.  One day the imperial demon army charged through the gate, they destroyed and pillaged everything in sight. Eventually one hero stood against the demons and won. The hero ended up sealing the demons in their home world, and destroying the one way for them to break through, the portal through the sacred gem. But as of recently the demons have been growing more powerful and have almost found a way to create a new portal. All of the gems besides the gray one were lost to time. It is now your job to repair the portal and defeat the demons that lay within.\n")
+    print("The portal has five slots; one slot had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once upon a time this land had bountiful resources and both the humans and demons lived peaceful lives. But this peace was not to last forever.  One day the imperial demon army charged through the gate. They destroyed and pillaged everything in sight. Eventually one hero stood against the demons in a long war. The hero ended up prevailing and he returned the demons back to their home world. He then destroyed the demon's one way to return to our world. The hero destroyed the portal and hid the sacred gems throughout the world. But as of recently the demons have been growing more powerful, and have almost found a way to create a new portal. All of the gems besides the gray one were eventually lost to time. It is now your job to dinf the gems, repair the portal and defeat the demons that lay within.\n")
     print(" The sprit then reveals that he is the ghost of that very hero who saved the world\n")
     decision = input('Would you like to accept this quest?\n')
     if decision == 'y' or decision == 'yes':
@@ -239,7 +256,9 @@ def broken_portal():
         print("you decline the spirit. He replies 'feel free to reconsider!' you return to the east\n")
         game.prev_location = broken_portal
         eastern_scene()
-        
+    else:
+        print("that is not an option please try again\n")
+        broken_portal()
 # -=code for desert path=-
 def southern_scene():
     global game
@@ -260,7 +279,8 @@ def southern_scene():
         elif 'desert chestplate' not in game.equipped_chest:
             print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
             southern_scene()
-
+        elif decision == 'help':
+        print('please, type south, or north\n')
 
 def golden_dunes_scene():
     global game
@@ -283,6 +303,8 @@ def golden_dunes_scene():
     elif decision == 'n' or decision == 'north':
         game.prev_location == golden_dunes_scene
         southern_scene()
+    elif decision == 'help':
+        print('please, type west, east, or north\n')
 
 
 def desert_trial():
@@ -614,7 +636,12 @@ def check_new_level():
             game.res += 1
     if bool_level_changed:
         game.max_health = gconfig.default_hero_health + game.player_level * 5 + game.res * 10
-
+def check_new_rank():
+    global game, gconfig
+    bool_rank_changed = False
+    while game.qp > gconfig.ranks[game.rank+1]:
+        bool_rank_changed = True
+        game.rank += 1
 
 # -=code for battles=-
 def attack_regular(previous_scene, location=None, trial=False):
@@ -678,6 +705,7 @@ def attack_regular(previous_scene, location=None, trial=False):
             game.gold += 50
             game.xp += game.enemy_level * 3
             check_new_level()
+            ##check_new_rank()
             if not trial:
                 print(game)
             previous_scene()
@@ -798,7 +826,7 @@ def randoms(enemy_location=None):
 
 if __name__ == "__main__":
     gconfig = Config()
-    game = Game(0, 1, gconfig.default_hero_health)
+    game = Game(0, 1, gconfig.default_hero_health,0)
     game.prev_location = ""
     gstory = Story()
     questlist = ['1. slay 10 Bandits\n', '2. slay 10 undead soldiers\n']
