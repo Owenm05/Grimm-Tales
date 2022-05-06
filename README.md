@@ -25,6 +25,8 @@ For any further questions feel free to contact me at mautustrike@gmail.com
 ### Contributors names
 
 ## Version History
+* 0.7.5 updated help
+    * updated the help function see [comit](https://github.com/Owenm05/Grimm-Tales/blob/Master/code.py)
 * 0.7.0 new storyline
     * there is now a new story see [commit](https://github.com/Owenm05/Grimm-Tales/commit/4207656c4d9cacfd13992ddee1e255ff64a3f847)
     * Storyline was updated see [commit](https://github.com/Owenm05/Grimm-Tales/commit/08903ef1aeb0b03fd23d9b68219f5b6848721c7e)
