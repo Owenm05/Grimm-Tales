@@ -170,7 +170,7 @@ Upon closer inspection of the gate you find a keyhole at the base of one of the 
             game.prev_location = game.location
             crossroads()
         elif decision == 'help':
-        print('please, type south, or north\n')
+            print('please, type south, or north\n')
     else:
         game.prev_scene = game.location
         print("finding no way to open the gate you return to the crossroads\n")
