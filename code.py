@@ -7,7 +7,7 @@ class Game:
         global gconfig
         self.gold = gold
         self.xp = xp
-        self.quest = []
+        self.quest = [""]
         self.qp= qp
         self.gem_count=0
         self.str = random.randrange(1, 7)
@@ -137,7 +137,7 @@ def eastern_scene():
     elif decision == 'w' or decision == 'west':
         game.prev_location = eastern_scene
         crossroads()
-    elif decision == 's' or decision == 'south' and "hero's quest" not in game.quest:
+    elif decision == 's' or decision == 'south':
         game.prev_location = eastern_scene
         broken_portal()
     elif decision == 'help' or decision == 'h':
@@ -247,11 +247,15 @@ def broken_portal():
     print(" The sprit then reveals that he is the ghost of that very hero who saved the world\n")
     decision = input('Would you like to accept this quest?\n')
     if decision == 'y' or decision == 'yes':
-        print("You have accepted the hero's quest\n")
-        game.quest.append("hero's quest")
-        print("you have taken the quest. The first gem resides where the serpant lies\n")
-        game.prev_location = broken_portal
-        eastern_scene()
+        if game.quest[0] != "hero's quest":
+            print("You have accepted the hero's quest\n")
+            game.quest[0]=("hero's quest")
+            print("you have taken the quest. The first gem resides where the serpant lies\n")
+            game.prev_location = broken_portal
+            eastern_scene()
+        else:
+            print("You already have this quest\n")
+            broken_portal()
     elif decision == 'n' or decision == 'no':
         print("you decline the spirit. He replies 'feel free to reconsider!' you return to the east\n")
         game.prev_location = broken_portal
