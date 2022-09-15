@@ -137,7 +137,7 @@ def eastern_scene():
     elif decision == 'w' or decision == 'west':
         game.prev_location = eastern_scene
         crossroads()
-    elif decision == 's' or decision == 'south':
+    elif decision == 's' or decision == 'south' and "hero's quest" not in game.quest:
         game.prev_location = eastern_scene
         broken_portal()
     elif decision == 'help' or decision == 'h':
@@ -195,7 +195,7 @@ def severed_highlands_scene():
         elif "Purple gem" in game.key_items:
             print("you already have beaten this trial, there is no need to return.\n")
         elif decision == 'help':
-        print('please, type south, or east\n')
+            print('please, type south, or east\n')
         else:
             print("error")
             severed_highlands_scene()
@@ -280,7 +280,7 @@ def southern_scene():
             print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
             southern_scene()
         elif decision == 'help':
-        print('please, type south, or north\n')
+            print('please, type south, or north\n')
 
 def golden_dunes_scene():
     global game
