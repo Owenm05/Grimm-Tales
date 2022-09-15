@@ -244,10 +244,10 @@ def broken_portal():
     game.location = broken_portal
     print("you see a broken portal ahead of you\n")
     print("The portal has five slots; one slot had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once upon a time this land had bountiful resources and both the humans and demons lived peaceful lives. But this peace was not to last forever.  One day the imperial demon army charged through the gate. They destroyed and pillaged everything in sight. Eventually one hero stood against the demons in a long war. The hero ended up prevailing and he returned the demons back to their home world. He then destroyed the demon's one way to return to our world. The hero destroyed the portal and hid the sacred gems throughout the world. But as of recently the demons have been growing more powerful, and have almost found a way to create a new portal. All of the gems besides the gray one were eventually lost to time. It is now your job to dinf the gems, repair the portal and defeat the demons that lay within.\n")
-    print(" The sprit then reveals that he is the ghost of that very hero who saved the world\n")
+    print(" The sprit then reveals that he is the  ghost of that very hero who saved the world\n")
     decision = input('Would you like to accept this quest?\n')
     if decision == 'y' or decision == 'yes':
-        if game.quest[0] != "hero's quest":
+        if game.quest[0] != "hero's quest" or game.quest[1] != "hero's quest" or game.quest[2] != "hero's quest":
             print("You have accepted the hero's quest\n")
             game.quest[0]=("hero's quest")
             print("you have taken the quest. The first gem resides where the serpant lies\n")
