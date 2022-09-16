@@ -808,17 +808,17 @@ def crossroads():
     # TBC - to be created by gods of the World
     print('''The World's Map on The Crossroads Sign:
     
-                              The Severed Highlands===Abyssal Depths
-                                         ||
-               Peaceful Forest      Colossal Gate
-                       ||                ||
-                    Dark Cave           North       Forest   Village   Graveyard
-                       ||                ||            \\\     ||      //
-TBC===Ocean===Beach===West==========Crossroads================East==============TBC
-                                         ||                    || 
-                        Merchant========South             Broken Portal      
-                                         ||
-                  Desert Village===Golden Dunes===Serpent's Den
+                                    The Severed Highlands===Abyssal Depths
+                                                ||
+                      Peaceful Forest      Colossal Gate
+                              ||                ||
+                            Dark Cave           North       Forest   Village   Graveyard
+                              ||                ||            \\\     ||      //
+TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
+                                                ||                    || 
+                               Merchant========South             Broken Portal      
+                                                ||
+                         Desert Village===Golden Dunes===Serpent's Den
           ''')
     decision = input(
         '''You find yourself at The Crossroad, which seems the center of the world.
