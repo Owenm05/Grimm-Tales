@@ -76,6 +76,9 @@ class Story:
         self.beach_story = "You decide to walk barefoot along the clean beach. The waves lap at your feet. you can see someone standing on a dock in the distance"
         self.southern_story = 'A vast expanse of golden sand stretches out just to the south of of you.\n The sandy dunes seem to continue far into the distance. Few have been known to survive the merciless sandstorms that are said to happen in the golden dunes.\n You see a merchent selling survival gear nearby\n'
         self.eastern_story = "'North of you you see a village, to the west of you is a crossroad, to the northwest you see a forest\n South of you you see a portal that appears to be broken,  and to the northeast you see a graveyard\n"
+        self.dock_story = '''As you approach the man on the dock the man turns to face you, he then intoduces himself as the captain of a nearby vessal.\n
+He claims to be able to be one of the few sailors to be able to cross the torental sea, but to do so it will cost you 100k gold.\n'''
+
         self.northern_story = '''you unlock the gate with the ancient key.\n 
 The sound of a powerful mechanism at work can be heard as the gate slowly opens.\n
 In the distance you see a mountain range commonly called The Severed Highlands.\n
@@ -112,12 +115,52 @@ def western_scene():
     elif decision == 'help':
         print('please, type south, or north\n')
 
+def dock_scene():
+    global game
+    game.location = dock_scene
+    print(gstory.dock_story)
+    decision = input("would you like to accept his offer, and attempt to cross the sea?\n") ##placeholder
+    if decision == "yes" or decision == "y":
+        if game.gold >= 100000:
+            print('you accept his offer and cross the sea.')
+            game.gold -= 100000
+            print('you win')
+            quit()
+            ## new continent with many more adventures in stock, possibly start the second game here
+        else:
+            print("false")
+        if game.gold < 100000:
+            print("You dont have enough to do this try again at a later date")
+            game.prev_location= dock_scene
+            beach_scene()
+        else:
+            print("try again")
+            dock_scene()
+    elif decision == "no" or decision== "n":
+        print(" you decline his offer and return to the beach")
+        beach_scene()
+        game.previous_location= dock_scene
+    elif decision == "gold":
+        game.gold += 100000000
+        dock_scene()
+    else:
+        print(" taht is not a choice")
+        dock_scene()
 
+    
 def beach_scene():
     print(gstory.beach_story)
-    decision = input('would you like to go back to the entrance of the dark cave or check out the dock?')
+    decision = input('would you like to go back to the entrance of the dark cave or check out the dock?\n')
     if decision == 'dock':
         game.prev_location = beach_scene
+        dock_scene()
+    elif decision == 'cave':
+        game.prev_location = beach_scene
+        western_scene()
+    else:
+        print('location not found try again')
+        beach_scene()
+        
 
 
 # -=gives the user the choices for the right path=-
