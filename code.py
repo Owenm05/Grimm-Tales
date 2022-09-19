@@ -114,7 +114,7 @@ def western_scene():
         beach_scene()
     elif decision == 'help':
         print('please, type south, or north\n')
-
+"""
 def dock_scene():
     global game
     game.location = dock_scene
@@ -144,25 +144,64 @@ def dock_scene():
         game.gold += 100000000
         dock_scene()
     else:
-        print(" taht is not a choice")
+        print(" that is not a choice")
         dock_scene()
-
+"""
     
 def beach_scene():
     print(gstory.beach_story)
-    decision = input('would you like to go back to the entrance of the dark cave or check out the dock?\n')
-    if decision == 'dock':
+    decision = input('would you like to go back to the entrance of the dark cave or check out the sea?\n')
+    if decision == 'sea':
         game.prev_location = beach_scene
-        dock_scene()
+        #dock_scene()
+        decision2=input("are you sure this is a dungeon that could easily kill you, would you like to move forward?\n")
+        if decision2=="y" or decision2=="yes":
+            sea_scene()
     elif decision == 'cave':
         game.prev_location = beach_scene
         western_scene()
     else:
         print('location not found try again')
         beach_scene()
-        
-
-
+def sea_scene():
+    global game,gconfig
+    game.location = sea_scene
+    if game.dungeon_kills   < 8:
+        game.dungeon_kills += 1
+        attack_regular(sea_scene, 'sea scene 1', True)
+    elif 8 <= game.dungeon_kills   < 11:
+        if game.dungeon_kills == 8:
+            print('The Second stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
+            while game.dungeon_kills<11:
+                game.dungeon_kills += 1
+                attack_regular(desert_trial, 'sea scene 2', True)
+    elif 11 <= game.dungeon_kills and game.dungeon_kills < 12:
+        if game.dungeon_kills == 11:
+            print('The Third stage of the Trial is starting!')
+            hp_station = math.ceil(game.max_health*0.8)
+            if game.health < hp_station:
+                restored = hp_station - game.health
+                game.health = hp_station
+                print(f'The fountain of Health has restored {restored} HP!')
+        game.dungeon_kills += 1
+        attack_regular(desert_trial, 'sea scene 3', True)
+    elif game.dungeon_kills == 12:
+        print("you cleared the dungeon!")
+        print("you got 10,000 gold as a reward")
+        game.gold += 10000
+        game.key_items= game.key_items+ "Blue gem"
+        print("you have gotten the blue gem as well as the scroll of power!")
+        print("you read the scroll, written on it is the words 'The next stone was given to the demons by one of the former heros in exchange for near endless power.'\n")
+        game.gem_count += 1
+        game.dungeon_kills = 0
+        print(game)
+        game.prev_location = sea_scene
+        beach_scene()
 # -=gives the user the choices for the right path=-
 def eastern_scene():
     global game
@@ -274,7 +313,8 @@ def abyssal_depths_scene():
         print("you got 10,000 gold as a reward")
         game.gold += 10000
         game.key_items= game.key_items+"Purple gem"
-        print("you have gotten the Purple gem!")
+        print("you have gotten the Purple gem, you see words inscribed in the wall next to the place where you found the stone")
+        print(" you read the wall it says, ' look under the tides to find where the next stone hides'\n")
         game.gem_count +=1
         game.dungeon_kills=0
         game.qp+=1
@@ -286,14 +326,14 @@ def broken_portal():
     global game
     game.location = broken_portal
     print("you see a broken portal ahead of you\n")
-    print("The portal has five slots; one slot had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once upon a time this land had bountiful resources and both the humans and demons lived peaceful lives. But this peace was not to last forever.  One day the imperial demon army charged through the gate. They destroyed and pillaged everything in sight. Eventually one hero stood against the demons in a long war. The hero ended up prevailing and he returned the demons back to their home world. He then destroyed the demon's one way to return to our world. The hero destroyed the portal and hid the sacred gems throughout the world. But as of recently the demons have been growing more powerful, and have almost found a way to create a new portal. All of the gems besides the gray one were eventually lost to time. It is now your job to dinf the gems, repair the portal and defeat the demons that lay within.\n")
+    print("The portal has five slots; one slot had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once this land had bountiful resources and both the humans and demons lived peaceful lives. But this peace was not to last forever.  One day the Demon armies forces charged through the gate. They destroyed and pillaged everything in sight. Eventually The countries five hero's as well as thier armies stood against the demons in a long war. In the end only one hero remained. He defeated the demon king and returned the demons back to their home world. With the remainder of his strength he destroyed the demon's only way to return to our world, the portal. With the portal out of the way the hero hid the sacred gems throughout the world with the goal of the emons never being allowed to return again. But as of recently the demons have grown more powerful, and have found a way to create a new portal. All of the gems besides the gray one were eventually lost to time. It is now your job to find the remaining gems, repair the portal and defeat the demons that lay within.\n")
     print(" The sprit then reveals that he is the  ghost of that very hero who saved the world\n")
     decision = input('Would you like to accept this quest?\n')
     if decision == 'y' or decision == 'yes':
         if game.quest[0] != "hero's quest" or game.quest[1] != "hero's quest" or game.quest[2] != "hero's quest":
             print("You have accepted the hero's quest\n")
             game.quest[0]=("hero's quest")
-            print("you have taken the quest. The first gem resides where the serpant lies\n")
+            print("you have taken the quest. The spirit tells you the first gem resides where the serpant lies\n")
             game.prev_location = broken_portal
             eastern_scene()
         else:
@@ -386,7 +426,8 @@ def desert_trial():
         print("you got 10,000 gold as a reward")
         game.gold += 10000
         game.key_items= game.key_items+ "Yellow gem"
-        print("you have gotten the Yellow gem!")
+        print("you have gotten the Yellow gem as well as the sacred scroll!")
+        print("you read the sacred scroll, written on it is the words 'The next stone can be found, way down deep under the ground.'\n")
         game.gem_count += 1
         game.dungeon_kills = 0
         print(game)
@@ -713,6 +754,15 @@ def attack_regular(previous_scene, location=None, trial=False):
     elif location == "abyssal depths 3":
         enemy_list = ['soul eater', 'greater demon']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "sea scene 1":
+        enemy_list = ['great white', 'pirate']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "sea scene 2":
+        enemy_list = ['mermaid', 'giant squid']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
+    elif location == "sea scene depths 3":
+        enemy_list = ['kracken', 'ghoul pirates']
+        enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
     elif location == "graveyard":
         enemy_list = ['zombie', 'undead soldier', 'undead archer']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
@@ -867,6 +917,12 @@ def randoms(enemy_location=None):
         game.enemy_level = random.randint(7, 10)
     else:
         game.enemy_level = random.randint(1, 5)
+    if enemy_location   == 'sea scene 2':
+        game.enemy_level = random.randint(15, 17)
+    elif enemy_location == 'sea scene 3':
+        game.enemy_level = random.randint(17, 20)
+    else:
+        game.enemy_level = random.randint(11, 15)
     game.enemy_dmg = random.randint(5, 10)
     game.player_dmg = random.randint(50, 100)
 
