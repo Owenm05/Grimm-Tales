@@ -179,7 +179,7 @@ def sea_scene():
                 print(f'The fountain of Health has restored {restored} HP!')
             while game.dungeon_kills<11:
                 game.dungeon_kills += 1
-                attack_regular(desert_trial, 'sea scene 2', True)
+                attack_regular(sea_scene, 'sea scene 2', True)
     elif 11 <= game.dungeon_kills and game.dungeon_kills < 12:
         if game.dungeon_kills == 11:
             print('The Third stage of the Trial is starting!')
@@ -189,7 +189,7 @@ def sea_scene():
                 game.health = hp_station
                 print(f'The fountain of Health has restored {restored} HP!')
         game.dungeon_kills += 1
-        attack_regular(desert_trial, 'sea scene 3', True)
+        attack_regular(sea_scene, 'sea scene 3', True)
     elif game.dungeon_kills == 12:
         print("you cleared the dungeon!")
         print("you got 10,000 gold as a reward")
@@ -760,7 +760,7 @@ def attack_regular(previous_scene, location=None, trial=False):
     elif location == "sea scene 2":
         enemy_list = ['mermaid', 'giant squid']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
-    elif location == "sea scene depths 3":
+    elif location == "sea scene 3":
         enemy_list = ['kracken', 'ghoul pirates']
         enemy_name = enemy_list[random.randint(0, len(enemy_list)-1)]
     elif location == "graveyard":
@@ -775,7 +775,7 @@ def attack_regular(previous_scene, location=None, trial=False):
     randoms(location)
     game.enemy_hp = game.enemy_level * 50
     print('A level', game.enemy_level, enemy_name, ' appears it has', game.enemy_hp, 'hp')
-    if location in ['desert trial 1', 'desert trial 2', 'desert trial 3', 'abyssal depths 1','abyssal depths 2','abyssal depths 3']:
+    if location in ['desert trial 1', 'desert trial 2', 'desert trial 3', 'abyssal depths 1','abyssal depths 2','abyssal depths 3','sea scene 1', 'sea scene 2', 'sea scene 3']:
         decision = 'fight'
     else:
         decision = input('fight or flee?\n')
