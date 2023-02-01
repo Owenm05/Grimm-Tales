@@ -114,7 +114,7 @@ def western_scene():
         beach_scene()
     elif decision == 'help':
         print('please, type south, or north\n')
-"""
+
 def dock_scene():
     global game
     game.location = dock_scene
@@ -146,7 +146,7 @@ def dock_scene():
     else:
         print(" that is not a choice")
         dock_scene()
-"""
+
     
 def beach_scene():
     print(gstory.beach_story)
@@ -328,6 +328,9 @@ def broken_portal():
     print("you see a broken portal ahead of you\n")
     print("The portal has five slots; one slot had a gray gem embedded in the slot. A spirit appears and explains to you the story behind the portal. Once this land had bountiful resources and both the humans and demons lived peaceful lives. But this peace was not to last forever.  One day the Demon armies forces charged through the gate. They destroyed and pillaged everything in sight. Eventually The countries five hero's as well as thier armies stood against the demons in a long war. In the end only one hero remained. He defeated the demon king and returned the demons back to their home world. With the remainder of his strength he destroyed the demon's only way to return to our world, the portal. With the portal out of the way the hero hid the sacred gems throughout the world with the goal of the emons never being allowed to return again. But as of recently the demons have grown more powerful, and have found a way to create a new portal. All of the gems besides the gray one were eventually lost to time. It is now your job to find the remaining gems, repair the portal and defeat the demons that lay within.\n")
     print(" The sprit then reveals that he is the  ghost of that very hero who saved the world\n")
+    if game.gem_count==3:
+        print(" you enter the gems and the portal opens")
+        
     decision = input('Would you like to accept this quest?\n')
     if decision == 'y' or decision == 'yes':
         if game.quest[0] != "hero's quest" or game.quest[1] != "hero's quest" or game.quest[2] != "hero's quest":
@@ -853,7 +856,7 @@ def bossfight(previous_scene):
 
 # -=code for the inital choice=-
 def crossroads():
-    global game
+    global game, test2
     game.location = "crossroads"
     # TBC - to be created by gods of the World
     print('''The World's Map on The Crossroads Sign:
@@ -901,6 +904,7 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         game.equipped_head = ['developers_crown']
         game.gold = 10000
         game.key_items=('ancient key')
+        print(gold2)
         crossroads()
     else:
         print('sorry, no such option is available\n')
