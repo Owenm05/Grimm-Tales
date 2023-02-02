@@ -211,6 +211,7 @@ def sea_scene():
 def eastern_scene():
     global game
     game.location = eastern_scene
+    map(game.location)
     print(gstory.eastern_story)
     decision = input('choose either n, w, nw, s or ne\n')
     if decision == 'northeast' or decision == 'ne':
