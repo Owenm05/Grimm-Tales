@@ -224,11 +224,14 @@ def eastern_scene():
     elif decision == 'w' or decision == 'west':
         game.prev_location = eastern_scene
         crossroads()
-    elif decision == 's' or decision == 'south':
+    elif (decision == 's' or decision == 'south') and "hero's quest" not in game.quest:
         game.prev_location = eastern_scene
         broken_portal()
     elif decision == 'help' or decision == 'h':
-        print('ne, n, nw, w,s\n')
+        if  "hero's quest" not in game.quest:
+            print('ne, n, nw, w,s\n')
+        else:
+            print('ne, n, nw, w\n')
         eastern_scene()
     elif decision == 'nw' and 'ancient key' in game.key_items:
         print("you already have defeated this boss")
@@ -858,11 +861,9 @@ def bossfight(previous_scene):
 
 
 # -=code for the inital choice=-
-def crossroads():
-    global game, test2
-    game.location = "crossroads"
-    # TBC - to be created by gods of the World
-    print('''The World's Map on The Crossroads Sign:
+def map(scene):
+    global game
+    map = '''The World's Map on The Crossroads Sign:
     
                                     The Severed Highlands===Abyssal Depths
                                                 ||
@@ -875,7 +876,58 @@ TBC===Ocean===Dock===Beach===West==========Crossroads================East=======
                                Merchant========South             Broken Portal      
                                                 ||
                          Desert Village===Golden Dunes===Serpent's Den
-          ''')
+          '''
+    if "hero's quest" in game.quest:
+         map='''The World's Map on The Crossroads Sign:
+        
+                                        The Severed Highlands===Abyssal Depths
+                                                    ||
+                          Peaceful Forest      Colossal Gate
+                                  ||                ||
+                                Dark Cave           North       Forest   Village   Graveyard
+                                  ||                ||            \\\     ||      //
+    TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
+                                                    ||                    || 
+                                   Merchant========South            Broken Portal      
+                                                    ||            (Quest In Progress)
+                          Desert Village===Golden Dunes===Serpent's Den
+              '''
+    if 'ancient key' in game.key_items:
+        map ='''The World's Map on The Crossroads Sign:
+    
+                                    The Severed Highlands===Abyssal Depths
+                                                ||
+                      Peaceful Forest      Colossal Gate
+                              ||                ||
+                            Dark Cave           North               Village   Graveyard
+                              ||                ||                    ||      //
+TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
+                                                ||                    || 
+                               Merchant========South             Broken Portal      
+                                                ||
+                         Desert Village===Golden Dunes===Serpent's Den
+          '''
+    if 'ancient key' in game.key_items and "hero's quest" in game.quest:
+        map ='''The World's Map on The Crossroads Sign:
+    
+                                    The Severed Highlands===Abyssal Depths
+                                                ||
+                      Peaceful Forest      Colossal Gate
+                              ||                ||
+                            Dark Cave           North               Village   Graveyard
+                              ||                ||                    ||      //
+TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
+                                                ||                    || 
+                               Merchant========South             Broken Portal      
+                                                ||            (Quest In Progress)
+                         Desert Village===Golden Dunes===Serpent's Den
+          '''
+    print(map)
+def crossroads():
+    global game, test2
+    game.location = "crossroads"
+    # TBC - to be created by gods of the World
+    map(game.location)
     decision = input(
         '''You find yourself at The Crossroad, which seems the center of the world.
 Do you want to move west, south, north, or move east? (type commands like w or west) \n''')
