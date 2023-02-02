@@ -157,7 +157,7 @@ def beach_scene():
         decision2=input("are you sure this is a dungeon that could easily kill you, would you like to move forward?\n")
         if decision2=="y" or decision2=="yes":
             sea_scene()
-    elif decision == 'cave':
+    elif decision == 'cave' or decision == 'back':
         game.prev_location = beach_scene
         western_scene()
     else:
@@ -165,10 +165,15 @@ def beach_scene():
         beach_scene()
 def sea_scene():
     global game,gconfig
+    location = 'sea scene '
+    stage = 1
+    templocation = ''
+    templocation+= location
+    templocation += str(stage)
     game.location = sea_scene
     if game.dungeon_kills   < 8:
         game.dungeon_kills += 1
-        attack_regular(sea_scene, 'sea scene 1', True)
+        attack_regular(sea_scene, templocation, True)
     elif 8 <= game.dungeon_kills   < 11:
         if game.dungeon_kills == 8:
             print('The Second stage of the Trial is starting!')
@@ -257,6 +262,16 @@ Upon closer inspection of the gate you find a keyhole at the base of one of the 
         game.prev_scene = game.location
         print("finding no way to open the gate you return to the crossroads\n")
         crossroads()
+def resetDungeons():
+    global game
+    print("you cleared the dungeon!")
+    print("you got 10,000 gold as a reward")
+    game.gold += 10000
+    game.gem_count +=1
+    game.dungeon_kills=0
+    game.qp+=1
+    print("you have ", game.qp,  " questpoints\n")
+    print(game)
 def severed_highlands_scene():
     global game
     game.location = severed_highlands_scene
@@ -309,17 +324,10 @@ def abyssal_depths_scene():
         game.dungeon_kills += 1
         attack_regular(abyssal_depths_scene, 'abyssal depths 3', True)
     elif game.dungeon_kills == 12:
-        print("you cleared the dungeon!")
-        print("you got 10,000 gold as a reward")
-        game.gold += 10000
+        resetDungeons()
         game.key_items= game.key_items+"Purple gem"
         print("you have gotten the Purple gem, you see words inscribed in the wall next to the place where you found the stone")
         print(" you read the wall it says, ' look under the tides to find where the next stone hides'\n")
-        game.gem_count +=1
-        game.dungeon_kills=0
-        game.qp+=1
-        print("you have ", game.qp,  " questpoints\n")
-        print(game)
         game.prev_location = abyssal_depths_scene
         severed_highlands_scene()
 def broken_portal():
@@ -425,15 +433,10 @@ def desert_trial():
         game.dungeon_kills += 1
         attack_regular(desert_trial, 'desert trial 3', True)
     elif game.dungeon_kills == 12:
-        print("you cleared the dungeon!")
-        print("you got 10,000 gold as a reward")
-        game.gold += 10000
+        resetDungeons()
         game.key_items= game.key_items+ "Yellow gem"
         print("you have gotten the Yellow gem as well as the sacred scroll!")
         print("you read the sacred scroll, written on it is the words 'The next stone can be found, way down deep under the ground.'\n")
-        game.gem_count += 1
-        game.dungeon_kills = 0
-        print(game)
         game.prev_location = desert_trial
         golden_dunes_scene()
     
@@ -904,7 +907,6 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         game.equipped_head = ['developers_crown']
         game.gold = 10000
         game.key_items=('ancient key')
-        print(gold2)
         crossroads()
     else:
         print('sorry, no such option is available\n')
