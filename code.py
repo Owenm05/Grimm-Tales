@@ -37,7 +37,8 @@ class Game:
         self.player_status = []
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank + "\nyou have " + str(self.gem_count) + " gem/gems"
-
+    def help():
+        print("Basic commands include: north, south, east, west or type advancedHelp for more help)
     def die(self):
         dice_d20 = random.randrange(1, 20)
         if dice_d20 <= 18:
@@ -196,15 +197,10 @@ def sea_scene():
         game.dungeon_kills += 1
         attack_regular(sea_scene, 'sea scene 3', True)
     elif game.dungeon_kills == 12:
-        print("you cleared the dungeon!")
-        print("you got 10,000 gold as a reward")
-        game.gold += 10000
+        resetDungeons()
         game.key_items= game.key_items+ "Blue gem"
         print("you have gotten the blue gem as well as the scroll of power!")
         print("you read the scroll, written on it is the words 'The next stone was given to the demons by one of the former heros in exchange for near endless power.'\n")
-        game.gem_count += 1
-        game.dungeon_kills = 0
-        print(game)
         game.prev_location = sea_scene
         beach_scene()
 # -=gives the user the choices for the right path=-
@@ -296,7 +292,7 @@ def severed_highlands_scene():
         elif "Purple gem" in game.key_items:
             print("you already have beaten this trial, there is no need to return.\n")
         elif decision == 'help':
-            print('please, type south, or east\n')
+            help()
         else:
             print("error")
             severed_highlands_scene()
@@ -864,66 +860,29 @@ def bossfight(previous_scene):
 # -=code for the inital choice=-
 def map(scene):
     global game
-    map = '''The World's Map on The Crossroads Sign:
-    
-                                    The Severed Highlands===Abyssal Depths
-                                                ||
-                      Peaceful Forest      Colossal Gate
-                              ||                ||
-                            Dark Cave           North       Forest   Village   Graveyard
-                              ||                ||            \\\     ||      //
-TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
-                                                ||                    || 
-                               Merchant========South             Broken Portal      
-                                                ||
-                         Desert Village===Golden Dunes===Serpent's Den
+    if game.location = "crossroads":
+        map = '''The World's Map on The Crossroads Sign:
+
+                      North    
+                        ||           
+        West========Crossroads========East
+                        ||                    
+                      South            
+                               
           '''
-    if "hero's quest" in game.quest:
-         map='''The World's Map on The Crossroads Sign:
-        
-                                        The Severed Highlands===Abyssal Depths
-                                                    ||
-                          Peaceful Forest      Colossal Gate
-                                  ||                ||
-                                Dark Cave           North       Forest   Village   Graveyard
-                                  ||                ||            \\\     ||      //
-    TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
-                                                    ||                    || 
-                                   Merchant========South            Broken Portal      
-                                                    ||            (Quest In Progress)
-                          Desert Village===Golden Dunes===Serpent's Den
-              '''
-    if 'ancient key' in game.key_items:
-        map ='''The World's Map on The Crossroads Sign:
-    
-                                    The Severed Highlands===Abyssal Depths
-                                                ||
-                      Peaceful Forest      Colossal Gate
-                              ||                ||
-                            Dark Cave           North               Village   Graveyard
-                              ||                ||                    ||      //
-TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
-                                                ||                    || 
-                               Merchant========South             Broken Portal      
-                                                ||
-                         Desert Village===Golden Dunes===Serpent's Den
-          '''
-    if 'ancient key' in game.key_items and "hero's quest" in game.quest:
-        map ='''The World's Map on The Crossroads Sign:
-    
-                                    The Severed Highlands===Abyssal Depths
-                                                ||
-                      Peaceful Forest      Colossal Gate
-                              ||                ||
-                            Dark Cave           North               Village   Graveyard
-                              ||                ||                    ||      //
-TBC===Ocean===Dock===Beach===West==========Crossroads================East==============TBC
-                                                ||                    || 
-                               Merchant========South             Broken Portal      
-                                                ||            (Quest In Progress)
-                         Desert Village===Golden Dunes===Serpent's Den
+    if game.location = "eastern_scene":
+        map = '''The World's Map on The Crossroads Sign:
+
+                     Forest   Village Graveyard
+                          \\    ||    //
+        Crossroads=============East
+                                || 
+                           Broken Portal 
+                     
+                               
           '''
     print(map)
+
 def crossroads():
     global game, test2
     game.location = "crossroads"
