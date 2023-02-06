@@ -35,10 +35,11 @@ class Game:
         self.equipped_feet = []
         self.equipped_head = []
         self.player_status = []
+        
     def __str__(self):
         return "your level is " + str(self.player_level) + "; you have " + str(self.xp) + " xp" + "\nyou have " + str(self.health) + " hp; you have " + str(self.gold) + " gold" + "\nyour current rank is " + self.rank + "\nyou have " + str(self.gem_count) + " gem/gems"
-    def help():
-        print("Basic commands include: north, south, east, west or type advancedHelp for more help)
+
+                
     def die(self):
         dice_d20 = random.randrange(1, 20)
         if dice_d20 <= 18:
@@ -114,7 +115,7 @@ def western_scene():
         game.prev_location = western_scene
         beach_scene()
     elif decision == 'help':
-        print('please, type south, or north\n')
+        help()
 
 def dock_scene():
     global game
@@ -144,6 +145,8 @@ def dock_scene():
     elif decision == "gold":
         game.gold += 100000000
         dock_scene()
+    elif decision == "help" or decision == "Help":
+        help()
     else:
         print(" that is not a choice")
         dock_scene()
@@ -161,6 +164,8 @@ def beach_scene():
     elif decision == 'cave' or decision == 'back':
         game.prev_location = beach_scene
         western_scene()
+    elif decision == "help":
+        help()
     else:
         print('location not found try again')
         beach_scene()
@@ -224,18 +229,11 @@ def eastern_scene():
     elif (decision == 's' or decision == 'south') and "hero's quest" not in game.quest:
         game.prev_location = eastern_scene
         broken_portal()
-    elif decision == 'help' or decision == 'h':
-        if  "hero's quest" not in game.quest:
-            print('ne, n, nw, w,s\n')
-        else:
-            print('ne, n, nw, w\n')
-        eastern_scene()
     elif decision == 'nw' and 'ancient key' in game.key_items:
         print("you already have defeated this boss")
         eastern_scene()
     elif decision == 'help':
-        print('please, type west, east,south, northeast, northwest, or north\n')
-        eastern_scene()
+        help()
     else:
         print('sorry, no such option is available\n')
         eastern_scene()
@@ -257,7 +255,7 @@ Upon closer inspection of the gate you find a keyhole at the base of one of the 
             game.prev_location = game.location
             crossroads()
         elif decision == 'help':
-            print('please, type south, or north\n')
+            help()
     else:
         game.prev_scene = game.location
         print("finding no way to open the gate you return to the crossroads\n")
@@ -378,7 +376,7 @@ def southern_scene():
             print('You do not have the required gear to enter the Golden Dunes try going to the merchant')
             southern_scene()
         elif decision == 'help':
-            print('please, type south, or north\n')
+            help()
 
 def golden_dunes_scene():
     global game
@@ -860,7 +858,8 @@ def bossfight(previous_scene):
 # -=code for the inital choice=-
 def map(scene):
     global game
-    if game.location = "crossroads":
+    map = ''
+    if game.location == "crossroads":
         map = '''The World's Map on The Crossroads Sign:
 
                       North    
@@ -870,7 +869,7 @@ def map(scene):
                       South            
                                
           '''
-    if game.location = "eastern_scene":
+    if game.location == "eastern_scene":
         map = '''The World's Map on The Crossroads Sign:
 
                      Forest   Village Graveyard
@@ -906,7 +905,7 @@ Do you want to move west, south, north, or move east? (type commands like w or w
         game.prev_location = crossroads
         southern_scene()
     elif decision == 'help':
-        print('please, type west, east, or north\n')
+        help()
         crossroads()
     elif decision == 'debug':
         gconfig.hero_chance_to_evade = 0.1
@@ -943,8 +942,28 @@ def randoms(enemy_location=None):
         game.enemy_level = random.randint(11, 15)
     game.enemy_dmg = random.randint(5, 10)
     game.player_dmg = random.randint(50, 100)
-
-
+def help():
+    global game
+    loc = game.location
+    print("Basic commands include: north, south, east, west\n")
+    answer = input("to continue to more advaced help type 1, to return to the game press 2")
+    if answer == "1":
+        print('Temp')
+    elif answer == "2":
+        if game .location == northern_scene:
+            northern_scene()
+        elif game .location == southern_scene:
+            southern_scene()
+        elif game .location == eastern_scene:
+            eastern_scene()
+        elif game .location == western_scene:
+            western_scene()
+        elif game.location == crossroads:
+            crossroads()
+    elif answer != 1 and answer !=2:
+        print(game.location)
+        help()
+        
 if __name__ == "__main__":
     gconfig = Config()
     game = Game(0, 1, gconfig.default_hero_health,0)
