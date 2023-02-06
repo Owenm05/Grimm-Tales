@@ -95,6 +95,7 @@ def ending_cave_collapsed():
 
 
 def western_scene():
+    ''' commands include north, west and (back/south)'''
     global game
     game.location = "western scene"
     print('You moved west')
@@ -945,22 +946,34 @@ def randoms(enemy_location=None):
 def help():
     global game
     loc = game.location
+    commands = ""
     print("Basic commands include: north, south, east, west\n")
-    answer = input("to continue to more advaced help type 1, to return to the game press 2")
-    if answer == "1":
-        print('Temp')
-    elif answer == "2":
-        if game .location == northern_scene:
+    answer = input("to continue to more advaced help type more, to return to the game type exit\n")
+    if answer == "more":
+        if game.location == northern_scene:
+            commands = "north or south"
+        elif game.location == southern_scene:
+            commands =  "choose either north, merchant, or south"
+        elif game.location == eastern_scene:
+            commands = "choose either north, west, north-west, south or north-east"
+        elif game.location == western_scene:
+            commands = 
+        elif game.location == crossroads:
+            commands =
+        print(commands)
+        help()
+    elif answer == "exit":
+        if game.location == northern_scene:
             northern_scene()
-        elif game .location == southern_scene:
+        elif game.location == southern_scene:
             southern_scene()
-        elif game .location == eastern_scene:
+        elif game.location == eastern_scene:
             eastern_scene()
-        elif game .location == western_scene:
+        elif game.location == western_scene:
             western_scene()
         elif game.location == crossroads:
             crossroads()
-    elif answer != 1 and answer !=2:
+    elif answer != "more" and answer !="exit":
         print(game.location)
         help()
         
