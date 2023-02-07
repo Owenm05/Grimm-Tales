@@ -17,7 +17,7 @@ python 3.6
 
 ## Help
 
-For any further questions feel free to contact me at mautustrike@gmail.com
+For any further questions feel free to contact me at rcwall14@gmail.com
 
 ## Authors
 * Code Created by Owenm05 and Areso
