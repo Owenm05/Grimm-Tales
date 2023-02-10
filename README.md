@@ -23,32 +23,6 @@ For any further questions feel free to contact me at rcwall14@gmail.com
 * Code Created by Owenm05 and Areso
 
 ### Contributors names
-
-## Version History
-* 0.7.5 updated help
-    * updated the help function see [commit](https://github.com/Owenm05/Grimm-Tales/blob/Master/code.py)
-* 0.7.0 new storyline
-    * there is now a new story see [commit](https://github.com/Owenm05/Grimm-Tales/commit/4207656c4d9cacfd13992ddee1e255ff64a3f847)
-    * Storyline was updated see [commit](https://github.com/Owenm05/Grimm-Tales/commit/08903ef1aeb0b03fd23d9b68219f5b6848721c7e)
-* 0.6.5 dungeons are better now
-* 0.6.0
-    * Dungeons are now better see both [commit 1](https://github.com/Owenm05/Grimm-Tales/commit/5b28a7be04988ebf313b4dcf838959bcd5f19fd4) and [commit 2](https://github.com/Owenm05/Grimm-Tales/commit/da453cff7d68d1d748461c0a4e51d0ee952a6520)
-* 0.5.92
-    * Enemies now vary by zone see [commit](https://github.com/Owenm05/Grimm-Tales/pull/16/commits)
-* 0.5.91
-    * Dexterity added see [commit](https://github.com/Owenm05/Grimm-Tales/commit/1564f4c8320e8c40c18d3e2ebeaa8d19dfb74cb0)
-* 0.5.6
-    * Added Intro
-* 0.5.5
-    * Fixed bug with boss fight
-    * Added comfirmation for boss fight
-    * see [commit](https://github.com/Owenm05/Grimm-Tales/commit/0651d360da2d0c8a84b9bed26e3ef8b7faf8f7ad) for updates
-* 0.5.0
-    * Various bug fixes and optimizations
-    * See [commit](https://github.com/Owenm05/Grimm-Tales/commit/32d7b686396196ead3fbb10144a3afb274d5b2d5)
-* 0.1.0
-    * Initial Release
-
 ## License
 
 This project is licensed under the GPLv3 License - see the LICENSE.md file for details
