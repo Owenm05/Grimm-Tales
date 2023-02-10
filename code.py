@@ -951,15 +951,15 @@ def help():
     answer = input("to continue to more advaced help type more, to return to the game type exit\n")
     if answer == "more":
         if game.location == northern_scene:
-            commands = "north or south"
+            commands = "choose a direction, your options include: north or south"
         elif game.location == southern_scene:
-            commands =  "choose either north, merchant, or south"
+            commands =  " your options include: north, merchant, or south"
         elif game.location == eastern_scene:
-            commands = "choose either north, west, north-west, south or north-east"
+            commands = "choose a direction, your options include: north, west, north-west, south or north-east"
         elif game.location == western_scene:
-            commands = 
+            commands = "choose a direction, your options include: north, west and (back/south)"
         elif game.location == crossroads:
-            commands =
+            commands = " choose a direction, your options include: north south east or west"
         print(commands)
         help()
     elif answer == "exit":
