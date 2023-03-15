@@ -1,3 +1,4 @@
+
 # #imports are always on top
 import random, math
 
@@ -170,45 +171,48 @@ def beach_scene():
     else:
         print('location not found try again')
         beach_scene()
-def sea_scene():
+def dungeon(location):
     global game,gconfig
-    location = 'sea scene '
     stage = 1
     templocation = ''
     templocation+= location
     templocation += str(stage)
-    game.location = sea_scene
-    if game.dungeon_kills   < 8:
-        game.dungeon_kills += 1
-        attack_regular(sea_scene, templocation, True)
-    elif 8 <= game.dungeon_kills   < 11:
-        if game.dungeon_kills == 8:
-            print('The Second stage of the Trial is starting!')
-            hp_station = math.ceil(game.max_health*0.8)
-            if game.health < hp_station:
-                restored = hp_station - game.health
-                game.health = hp_station
-                print(f'The fountain of Health has restored {restored} HP!')
-            while game.dungeon_kills<11:
-                game.dungeon_kills += 1
-                attack_regular(sea_scene, 'sea scene 2', True)
-    elif 11 <= game.dungeon_kills and game.dungeon_kills < 12:
-        if game.dungeon_kills == 11:
-            print('The Third stage of the Trial is starting!')
-            hp_station = math.ceil(game.max_health*0.8)
-            if game.health < hp_station:
-                restored = hp_station - game.health
-                game.health = hp_station
-                print(f'The fountain of Health has restored {restored} HP!')
-        game.dungeon_kills += 1
-        attack_regular(sea_scene, 'sea scene 3', True)
-    elif game.dungeon_kills == 12:
-        resetDungeons()
-        game.key_items= game.key_items+ "Blue gem"
-        print("you have gotten the blue gem as well as the scroll of power!")
-        print("you read the scroll, written on it is the words 'The next stone was given to the demons by one of the former heros in exchange for near endless power.'\n")
-        game.prev_location = sea_scene
-        beach_scene()
+    if location == 'sea scene ':
+        game.location = sea_scene
+        if game.dungeon_kills < 8:
+            game.dungeon_kills += 1
+            attack_regular(sea_scene, templocation, True)
+        elif 8 <= game.dungeon_kills   < 11:
+            if game.dungeon_kills == 8:
+                print('The Second stage of the Trial is starting!')
+                hp_station = math.ceil(game.max_health*0.8)
+                if game.health < hp_station:
+                    restored = hp_station - game.health
+                    game.health = hp_station
+                    print(f'The fountain of Health has restored {restored} HP!')
+                while game.dungeon_kills<11:
+                    game.dungeon_kills += 1
+                    attack_regular(sea_scene, 'sea scene 2', True)
+        elif 11 <= game.dungeon_kills and game.dungeon_kills < 12:
+            if game.dungeon_kills == 11:
+                print('The Third stage of the Trial is starting!')
+                hp_station = math.ceil(game.max_health*0.8)
+                if game.health < hp_station:
+                    restored = hp_station - game.health
+                    game.health = hp_station
+                    print(f'The fountain of Health has restored {restored} HP!')
+            game.dungeon_kills += 1
+            attack_regular(sea_scene, 'sea scene 3', True)
+        elif game.dungeon_kills == 12:
+            resetDungeons()
+            game.key_items= game.key_items+ "Blue gem"
+            print("you have gotten the blue gem as well as the scroll of power!")
+            print("you read the scroll, written on it is the words 'The next stone was given to the demons by one of the former heros in exchange for near endless power.'\n")
+            game.prev_location = sea_scene
+            beach_scene()
+def sea_scene():
+    global game,gconfig
+    dungeon('sea scene ')
 # -=gives the user the choices for the right path=-
 def eastern_scene():
     global game
